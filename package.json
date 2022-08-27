@@ -16,9 +16,11 @@
     "dependencies": {
         "@inertiajs/inertia": "^0.11.0",
         "@inertiajs/inertia-vue3": "^0.6.0",
+        "@lottiefiles/vue-lottie-player": "^1.0.9",
         "@vitejs/plugin-vue": "^3.0.3",
         "@vue/compiler-sfc": "^3.2.37",
         "vue": "^3.2.36",
-        "vue-load": "^1.0.2"
+        "vue-load": "^1.0.2",
+        "vue3-lottie": "^2.3.0"
     }
 }
