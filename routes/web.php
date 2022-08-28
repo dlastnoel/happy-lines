@@ -15,5 +15,17 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Login');
+    return Inertia::render('Auth/Login');
+});
+
+Route::get('/dashboard', function () {
+    return Inertia::render('App/Dashboard');
+});
+
+Route::get('/staffs/register', function () {
+    return Inertia::render('App/Staffs/Register');
+});
+
+Route::get('windows/create', function () {
+    return Inertia::render('App/Windows/Create');
 });

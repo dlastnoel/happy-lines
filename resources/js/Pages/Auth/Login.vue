@@ -1,7 +1,7 @@
 <template>
-  <div class="h-screen grid place-content-center bg-sky-600">
-    <div class="h-[85vh] w-[90vw] grid grid-cols-2 rounded-lg shadow-lg bg-white ">
-      <div class="p-5 bg-sky-6000">
+  <div class="h-screen grid place-content-center gap-5 bg-sky-600">
+    <div class="h-[85vh] w-[90vw] grid lg:grid-cols-2 rounded-lg shadow-lg bg-white ">
+      <div class="p-5 hidden lg:grid place-content-center ">
         <Vue3Lottie :animationData="doctorLottie" class="h-full w-full" />
       </div>
       <div class="h-full grid place-content-center gap-5">
@@ -25,13 +25,19 @@
         </form>
       </div>
     </div>
+    <div>
+      <div class="flex justify-between items-center flex-col md:flex-row">
+        <h6 class="font-semibold text-white">Copyright &copy; 2022 Happy Lines</h6>
+        <h6 class="font-semibold text-white">Happy Patient Queuing Management System</h6>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { Vue3Lottie } from 'vue3-lottie'
 import 'vue3-lottie/dist/style.css'
-import doctorLottie from '../../json/doctor.json'
+import doctorLottie from '../../../json/doctor.json'
 
 export default {
     components: {
