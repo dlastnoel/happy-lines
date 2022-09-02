@@ -1,16 +1,15 @@
 <template>
   <Head>
-    <title>Dashboard</title>
+    <title>Queue Records</title>
   </Head>
   <div>
   </div>
 </template>
 
 <script>
-import AdminLayout from '../../Layouts/Admin.vue'
-
+import AdminLayout from '../../../Layouts/Admin.vue'
 export default {
-  layout: AdminLayout
+  layout: AdminLayout,
 }
 </script>
 

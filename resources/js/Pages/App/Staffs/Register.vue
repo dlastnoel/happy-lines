@@ -1,4 +1,7 @@
 <template>
+  <Head>
+    <title>Staffs</title>
+  </Head>
   <div>
     <div class="m-5 p-3 shadow rounded bg-white">
       <form action="">
