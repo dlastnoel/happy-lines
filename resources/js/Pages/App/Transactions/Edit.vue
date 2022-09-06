@@ -9,7 +9,7 @@
         to: '/transactions',
       },
       {
-        label: 'Create',
+        label: transaction.type,
         to: '#',
       }
     ]" />
@@ -22,7 +22,7 @@
           <p class="text-xl font-semibold">Transaction Information</p>
           <hr>
         </div>
-        <div class="w-full flex flex-col gap-3 p-2">
+        <div class="mt-2 w-full flex flex-col gap-3 p-2">
           <label for="type">
             <span>Transaction Type</span>
             <input 
@@ -45,8 +45,8 @@
           </label>
           <div class="flex justify-end items-center">
             <div class="flex justify-center items-center gap-2 p-2">
-              <button type="reset" class="block rounded p-3 font-semibold text-lg bg-gray-200 text-black hover:bg-gray-100 hover:cursor-pointer" @click="clearFields()">Clear Fields</button>
-              <button :disabled="submitted" type="submit" class="block rounded p-3 font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">Add Transaction</button>
+              <!-- <button type="reset" class="block rounded p-3 font-semibold text-lg bg-gray-200 text-black hover:bg-gray-100 hover:cursor-pointer" @click="clearFields()">Clear Fields</button> -->
+              <button :disabled="submitted" type="submit" class="block rounded p-3 font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">Update Transaction</button>
             </div>
           </div>
         </div>
@@ -64,6 +64,7 @@ export default {
   layout: AdminLayout,
 
   props: {
+    transaction: Object,
     errors: Object,
   },
 
@@ -73,10 +74,6 @@ export default {
 
   data() {
     return {
-      transaction: {
-        type: '',
-        description: '',
-      },
       submitted: false,
     }
   },
@@ -84,23 +81,23 @@ export default {
   methods: {
     handleSubmit() {
       this.submitted = true
-      this.$inertia.post('/transactions', this.transaction, {
+      this.$inertia.put(`/transactions/${this.transaction.id}`, this.transaction, {
         onError: () => {
-          this.showToast('Error creating transaction', 'error')
+          this.showToast('Error updating transaction', 'error')
         },
         onSuccess: () => {
-          this.showToast('Successfully created transaction', 'success')
+          this.showToast('Successfully updated transaction', 'success')
         }
       })
       this.submitted = false
     },
 
-    clearFields() {
-      this.transaction = {
-        type: '',
-        description: '',
-      }
-    }
+    // clearFields() {
+    //   this.transaction = {
+    //     type: '',
+    //     description: '',
+    //   }
+    // }
   }
 }
 </script>

@@ -9,7 +9,7 @@
         to: '/windows',
       },
       {
-        label: 'Create',
+        label: window.name,
         to: '#',
       }
     ]" />
@@ -22,7 +22,7 @@
           <p class="text-xl font-semibold">Window Information</p>
           <hr>
         </div>
-        <div class="w-full flex flex-col gap-3 p-2">
+        <div class="mt-2 w-full flex flex-col gap-3 p-2">
           <label for="name">
             <span>Window Name</span>
             <input 
@@ -40,6 +40,7 @@
               class="block w-full bg-white px-3 p-2 rounded border border-sky-600"
               v-model="window.transaction_id">
               <option :value="null" disabled>Select Transaction Type</option>
+              <option :value="window.transaction_id">{{window.transaction_type}}</option>
               <template v-for="(transaction, i) in transactions" :key="i">
                 <option :value="transaction.id">{{transaction.type}}</option>
               </template>
@@ -66,8 +67,8 @@
               <span class="ml-1">Set as Active</span>
             </label>
             <div class="flex justify-center items-center gap-2 p-2">
-              <button type="reset" class="block rounded p-3 font-semibold text-lg bg-gray-200 text-black hover:bg-gray-100 hover:cursor-pointer">Clear Fields</button>
-              <button type="submit" :disabled="submitted" class="block rounded p-3 font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">Add Window</button>
+              <!-- <button type="reset" class="block rounded p-3 font-semibold text-lg bg-gray-200 text-black hover:bg-gray-100 hover:cursor-pointer">Clear Fields</button> -->
+              <button type="submit" class="block rounded p-3 font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">Update Window</button>
             </div>
           </div>
         </div>
@@ -89,17 +90,12 @@ export default {
 
   props: {
     transactions: Object,
+    window: Object,
     errors: Object
   },
 
   data() {
     return {
-      window: {
-        name: '',
-        transaction_id: null,
-        description: '',
-        is_active: false,
-      },
       submitted: false,
     }
   },
@@ -107,25 +103,25 @@ export default {
   methods: {
     handleSubmit() {
       this.submitted = true
-      this.$inertia.post('/windows', this.window, {
+      this.$inertia.put(`/windows/${this.window.id}`, this.window, {
         onError: () => {
-          this.showToast('Error creating window', 'error')
+          this.showToast('Error updated window', 'error')
         },
         onSuccess: () => {
-          this.showToast('Succesfully created window', 'success')
+          this.showToast('Succesfully updated window', 'success')
         }
       })
       this.submitted = false
     },
 
-    clearFields() {
-      this.window = {
-        name: '',
-        transaction_id: null,
-        description: '',
-        is_active: false,
-      }
-    }
+    // clearFields() {
+    //   this.window = {
+    //     name: '',
+    //     transaction_id: null,
+    //     description: '',
+    //     is_active: false,
+    //   }
+    // }
   }
 }
 </script>
