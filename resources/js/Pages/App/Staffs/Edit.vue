@@ -9,7 +9,7 @@
         to: '/staffs',
       },
       {
-        label: 'Register',
+        label: `${staff.firstname} ${staff.lastname}`,
         to: '#',
       }
     ]" />
@@ -129,8 +129,8 @@
 
         <!-- action buttons -->
         <div class="w-full flex justify-end items-center gap-2 p-2">
-          <button @click.prevent="clearFields()" type="reset" class="block rounded p-3 font-semibold text-lg bg-gray-200 text-black hover:bg-gray-100 hover:cursor-pointer" >Clear Fields</button>
-          <button type="submit" :disabled="submitted" class="block rounded p-3 font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">Add Staff</button>
+          <!-- <button @click.prevent="clearFields()" type="reset" class="block rounded p-3 font-semibold text-lg bg-gray-200 text-black hover:bg-gray-100 hover:cursor-pointer" >Clear Fields</button> -->
+          <button type="submit" :disabled="submitted" class="block rounded p-3 font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">Update Staff</button>
         </div>
       </div>
     </form>
@@ -152,22 +152,12 @@ export default {
 
   props: {
     errors: Object,
+    staff: Object,
   },
 
   data() {
     return {
       v$: useVuelidate(),
-      staff: {
-        firstname: 'Reinard Sam',
-        lastname: 'Boado',
-        contact_no: '09987654322',
-        email: 'reinardsam@happylines.com',
-        username: 'reinardsam',
-        role: 'staff',  
-        status: 'active',
-        password: 'ilovehappypatient',
-        password_confirmation: 'ilovehappypatient',
-      },
       submitted: false,
     }
   },
@@ -210,33 +200,33 @@ export default {
       this.submitted = true
       this.v$.$validate()
       if(!this.v$.$error) {
-        this.$inertia.post('/staffs', this.staff, {
+        this.$inertia.put(`/staffs/${this.staff.id}`, this.staff, {
           onError: (errors) => {
             for(const error in errors) {
               this.showToast(`${errors[error]}`, 'error')  
             }
-            this.showToast('Error registering staff', 'error')
+            this.showToast('Error updating staff', 'error')
           },
           onSuccess: () => {
-            this.showToast('Successfully registered staff', 'success')
+            this.showToast('Successfully updated staff', 'success')
           }
         })
       }
       this.submitted = false
     },
 
-    clearFields() {
-      this.staff =  {
-        firstname: '',
-        lastname: '',
-        contact_no: '',
-        email: '',
-        status: 'active',
-        username: '',
-        role: 'staff',        
-        password: 'st@ffpw2k22',
-      }
-    }
+    // clearFields() {
+    //   this.staff =  {
+    //     firstname: '',
+    //     lastname: '',
+    //     contact_no: '',
+    //     email: '',
+    //     status: 'active',
+    //     username: '',
+    //     role: 'staff',        
+    //     password: 'st@ffpw2k22',
+    //   }
+    // }
   }
 }
 </script>

@@ -18,11 +18,12 @@
               <span class="text-md">Username</span>
               <input 
                 type="text" name="username" id="username" placeholder="Username" 
-                class="block rounded p-3 mt-1 w-[400px] md:w-[350px] lg:w-[400px] border-2 border-sky-600"
+                class="block rounded p-3 mt-1 w-[400px] md:w-[350px] lg:w-[400px] border-2"
+                :class="v$.login.username.$error ? 'border-red-500' : 'border-sky-600'"
                 v-model="login.username" />
             </label>
-            <div v-if="errors.username">
-              <p class="text-sm text-red-700">{{errors.username}}</p>
+            <div v-if="v$.login.username.$error">
+              <p class="text-md text-red-700">{{v$.login.username.$errors[0].$message}}</p>
             </div>
           </div>
           
@@ -31,11 +32,12 @@
               <span class="text-md">Password</span>
               <input 
                 type="password" name="password" id="password" placeholder="Password" 
-                class="block rounded p-3 mt-1 w-[400px] md:w-[350px] lg:w-[400px]  border-2 border-sky-600"
+                class="block rounded p-3 mt-1 w-[400px] md:w-[350px] lg:w-[400px]  border-2"
+                :class="v$.login.password.$error ? 'border-red-500' : 'border-sky-600'"
                 v-model="login.password" />
             </label>
-            <div v-if="errors.password">
-              <p class="text-sm text-red-700">{{errors.password}}</p>
+            <div v-if="v$.login.password.$error">
+              <p class="text-md text-red-700">{{v$.login.password.$errors[0].$message}}</p>
             </div>
           </div>
 
@@ -59,6 +61,8 @@
 import { Vue3Lottie } from 'vue3-lottie'
 import 'vue3-lottie/dist/style.css'
 import doctorLottie from '../../../json/doctor.json'
+import useVuelidate from '@vuelidate/core'
+import { required, alphaNum, minLength } from '@vuelidate/validators'
 
 export default {
   components: {
@@ -72,6 +76,7 @@ export default {
   data() {
     return {
       doctorLottie,
+      v$: useVuelidate(),
       login: {
         username: '',
         password: '',
@@ -80,17 +85,34 @@ export default {
     }
   },
 
+  validations() {
+    return {
+      login: {
+        username: { required, alphaNum },
+        password: { 
+          required,
+          minLength: minLength(8),
+        }
+      }
+    }
+  },
+
   methods: {
     handleSubmit() {
       this.submitted = true,
-      this.$inertia.post('/login', this.login, {
-        onError: () => {
-          this.showToast('Error logging in', 'error')
-        },
-        onSuccess: () => {
-          this.showToast('Welcome!')
-        }
-      })
+      this.v$.$validate()
+      if(!this.v$.$error) {
+        this.$inertia.post('/login', this.login, {
+          onError: (errors) => {
+            for(const error in errors) {
+                this.showToast(`${errors[error]}`, 'error')  
+              }
+          },
+          onSuccess: () => {
+            this.showToast('Welcome!')
+          }
+        })
+      }
       this.submitted = false
     }
   }

@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Window;
-use App\Models\Transaction;
+use App\Models\Service;
+
+use App\Http\Requests\CreateWindowFormRequest;
+use App\Http\Requests\UpdateWindowFormRequest;
 
 class WindowController extends Controller
 {
@@ -21,7 +24,7 @@ class WindowController extends Controller
                 'id' => $window->id,
                 'name' => $window->name,
                 'description' => $window->description,
-                'transaction' => $window->transaction->type
+                // 'service' => $window->service->type
             ])
         ]);
     }
@@ -34,11 +37,11 @@ class WindowController extends Controller
     public function create()
     {
         $selected = Window::all()->pluck('transaction_id');
-        $transactions = Transaction::query()->whereNotIn('id', $selected)->get();
+        $services = Service::query()->whereNotIn('id', $selected)->get();
         return Inertia::render('App/Windows/Create', [
-            'transactions' => $transactions->map(fn ($transaction) => [
-                'id' => $transaction->id,
-                'type' => $transaction->type,
+            'services' => $services->map(fn ($service) => [
+                'id' => $service->id,
+                'type' => $service->type,
             ]),
         ]);
     }
@@ -49,16 +52,9 @@ class WindowController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateWindowFormRequest $request)
     {
-        Window::create(
-            $request->validate([
-                'name' => ['required', 'unique:windows,name'],
-                'transaction_id' => ['required', 'integer'],
-                'description' => ['required'],
-                'is_active' => ['sometimes', 'nullable', 'boolean'],
-            ])
-        );
+        Window::create($request->validated());
 
         return redirect('/windows');
     }
@@ -83,14 +79,14 @@ class WindowController extends Controller
     public function edit(Window $window)
     {
         $selected = Window::all()->pluck('transaction_id');
-        $transactions = Transaction::query()->whereNotIn('id', $selected)->get();
+        $services = Service::query()->whereNotIn('id', $selected)->get();
         return Inertia::render('App/Windows/Edit', [
-            'transactions' => $transactions,
+            'services' => $services,
             'window' => [
                 'id' => $window->id,
                 'name' => $window->name,
-                'transaction_id' => $window->transaction_id,
-                'transaction_type' => $window->transaction->type,
+                'service_id' => $window->service_id,
+                'service_type' => $window->service->type,
                 'description' => $window->description,
                 'is_active' => $window->is_active ? true : false,
             ]
@@ -104,9 +100,11 @@ class WindowController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateWindowFormRequest $request, Window $window)
     {
-        //
+        $window->update($request->validated());
+
+        return redirect('/windows');
     }
 
     /**

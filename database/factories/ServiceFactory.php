@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Service>
  */
-class TransactionFactory extends Factory
+class ServiceFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class TransactionFactory extends Factory
     public function definition()
     {
         return [
-            'type' => fake()->word(),
+            'type' => fake()->word(2),
             'description' => fake()->paragraph(),
         ];
     }

@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Transaction;
 
-class TransactionController extends Controller
+use App\Models\Service;
+
+use App\Http\Requests\CreateServiceFormRequest;
+use App\Http\Requests\UpdateServiceFormRequest;
+
+class ServiceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +20,11 @@ class TransactionController extends Controller
     public function index()
     {
 
-        return Inertia::render('App/Transactions/Index', [
-            'transactions' => Transaction::all()->map(fn ($transaction) => [
-                'id' => $transaction->id,
-                'type' => $transaction->type,
-                'description' => $transaction->description,
+        return Inertia::render('App/Services/Index', [
+            'services' => Service::all()->map(fn ($service) => [
+                'id' => $service->id,
+                'type' => $service->type,
+                'description' => $service->description,
             ])
         ]);
     }
@@ -32,7 +36,7 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        return Inertia::render('App/Transactions/Create');
+        return Inertia::render('App/Services/Create');
     }
 
     /**
@@ -41,16 +45,11 @@ class TransactionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateServiceFormRequest $request)
     {
-        Transaction::create(
-            $request->validate([
-                'type' => ['required', 'unique:transactions,type'],
-                'description' => ['required'],
-            ])
-        );
+        Service::create($request->validated());
 
-        return redirect('/transactions');
+        return redirect('/services');
     }
 
     /**
@@ -70,13 +69,13 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Transaction $transaction)
+    public function edit(Service $service)
     {
-        return Inertia::render('App/Transactions/Edit', [
-            'transaction' =>  [
-                'id' => $transaction->id,
-                'type' => $transaction->type,
-                'description' => $transaction->description,
+        return Inertia::render('App/Services/Edit', [
+            'service' =>  [
+                'id' => $service->id,
+                'type' => $service->type,
+                'description' => $service->description,
             ]
         ]);
     }
@@ -88,16 +87,11 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Transaction $transaction)
+    public function update(UpdateServiceFormRequest $request, Service $service)
     {
-        $transaction->update(
-            $request->validate([
-                'type' => ['required', 'unique:transactions,type'],
-                'description' => ['required', 'max:50'],
-            ])
-        );
+        $service->update($request->validated());
 
-        return redirect('/transactions');
+        return redirect('/services');
     }
 
     /**

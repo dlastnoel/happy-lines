@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+
 use App\Models\User;
+
+use App\Http\Requests\RegisterUserFormRequest;
+use App\Http\Requests\UpdateUserFormRequest;
 
 class UserController extends Controller
 {
@@ -16,7 +21,7 @@ class UserController extends Controller
     public function index()
     {
         return Inertia::render('App/Staffs/Index', [
-            'users' => User::all()->map(fn ($user) => [
+            'users' => User::where('role', 'staff')->get()->map(fn ($user) => [
                 'id' => $user->id,
                 'fullname' => $user->firstname . ' ' . $user->lastname,
                 'contact_no' => $user->contact_no,
@@ -43,20 +48,11 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RegisterUserFormRequest $request)
     {
-        User::create(
-            $request->validate([
-                'firstname' => ['required'],
-                'lastname' => ['required'],
-                'contact_no' => ['required', 'numeric', 'unique:users,contact_no'],
-                'email' => ['required', 'unique:users,email'],
-                'status' => ['required'],
-                'username' => ['required', 'unique:users,username'],
-                'role' => ['required'],
-                'password' => ['required'],
-            ])
-        );
+        $request_data = $request->validated();
+        $request_data['password'] = Hash::make($request->validated()['password']);
+        User::create($request_data);
 
         return redirect('/staffs');
     }
@@ -67,7 +63,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
         //
     }
@@ -78,9 +74,22 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return Inertia::render('App/Staffs/Edit', [
+            'staff' => [
+                'id' => $user->id,
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'contact_no' => $user->contact_no,
+                'email' => $user->email,
+                'username' => $user->username,
+                'status' => $user->status,
+                'role' => $user->role,
+                'password' => '',
+                'password_confirmation' => '',
+            ]
+        ]);
     }
 
     /**
@@ -90,9 +99,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserFormRequest $request, User $user)
     {
-        //
+        $user->update($request->validated());
+
+        return redirect('/staffs');
     }
 
     /**

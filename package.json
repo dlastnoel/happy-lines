@@ -20,6 +20,8 @@
         "@lottiefiles/vue-lottie-player": "^1.0.9",
         "@vitejs/plugin-vue": "^3.0.3",
         "@vue/compiler-sfc": "^3.2.37",
+        "@vuelidate/core": "^2.0.0-alpha.44",
+        "@vuelidate/validators": "^2.0.0-alpha.31",
         "vue": "^3.2.36",
         "vue-load": "^1.0.2",
         "vue-toastification": "^2.0.0-rc.5",

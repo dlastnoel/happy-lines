@@ -3,10 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\WindowController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,17 +19,17 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-Route::get('/', [LoginController::class, 'index'])
+Route::get('/login', function () {
+    return Inertia::render('Auth/Login');
+})
     ->name('login');
-Route::post('/login', [LoginController::class, 'login']);
+// Route::post('/login', [LoginController::class, 'login']);
 
 
-// group with authentication
+// Grouped with auth middleware
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('App/Dashboard');
-    })->name('dashboard');
+    Route::get('/', DashboardController::class);
 
     Route::get('/records', function () {
         return Inertia::render('App/Records/Index');
@@ -42,12 +42,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/staffs/register', function () {
         return Inertia::render('App/Staffs/Register');
     });
+    Route::get('/staffs/{user}/edit', [UserController::class, 'edit']);
+    Route::put('/staffs/{user}', [UserController::class, 'update']);
 
     // windows 
     Route::resource('windows', WindowController::class);
 
-    // transactions
-    Route::resource('transactions', TransactionController::class);
+    // services
+    Route::resource('services', ServiceController::class);
 });
 
 
@@ -59,7 +61,6 @@ Route::get('register/regular', function () {
 Route::get('/register/priority', function () {
     return Inertia::render('App/Register/Priority');
 });
-
 
 Route::get('/serving/', function () {
     return Inertia::render('App/Serving/Index');

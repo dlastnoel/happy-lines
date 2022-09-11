@@ -18,9 +18,8 @@ class WindowFactory extends Factory
     {
         return [
             'name' => fake()->word(),
-            'transaction_id' => \App\Models\Transaction::factory(),
             'description' => fake()->paragraph(),
-            'is_active' => rand(0, 1),
+            'is_active' => rand(1, 0),
         ];
     }
 }

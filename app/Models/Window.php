@@ -12,12 +12,18 @@ class Window extends Model
         'name',
         'transaction_id',
         'description',
+        'is_occupied',
         'is_active',
     ];
 
-    public function transaction()
+    public function services()
     {
-        return $this->belongsTo(Transaction::class);
+        return $this->belongsToMany(Service::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     use HasFactory;
