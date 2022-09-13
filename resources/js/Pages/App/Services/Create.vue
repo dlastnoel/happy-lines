@@ -102,7 +102,7 @@ export default {
       this.submitted = true
       this.v$.$validate()
       if (!this.v$.$error) {
-        this.$inertia.post('/services', this.transaction, {
+        this.$inertia.post('/services', this.service, {
           onError: (errors) => {
             for(const error in errors) {
               this.showToast(`${errors[error]}`, 'error')  

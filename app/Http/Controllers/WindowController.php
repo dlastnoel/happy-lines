@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+
+use App\Models\User;
 use App\Models\Window;
 use App\Models\Service;
 
@@ -24,7 +26,8 @@ class WindowController extends Controller
                 'id' => $window->id,
                 'name' => $window->name,
                 'description' => $window->description,
-                // 'service' => $window->service->type
+                'is_active' => $window->is_active === 1 ? true : false,
+                'user' => $window->user->fullname(),
             ])
         ]);
     }
@@ -36,12 +39,21 @@ class WindowController extends Controller
      */
     public function create()
     {
-        $selected = Window::all()->pluck('transaction_id');
-        $services = Service::query()->whereNotIn('id', $selected)->get();
+        $services = Service::all();
+
+        $tellers = Window::all()->pluck('user_id');
+        $users = User::query()->whereNotIn('id', $tellers)->get();
+
         return Inertia::render('App/Windows/Create', [
+            'users' => $users->map(fn ($user) => [
+                'id' => $user->id,
+                'fullname' => $user->fullname(),
+                'selected' => false,
+            ]),
             'services' => $services->map(fn ($service) => [
                 'id' => $service->id,
                 'type' => $service->type,
+                'selected' => false,
             ]),
         ]);
     }
@@ -54,7 +66,14 @@ class WindowController extends Controller
      */
     public function store(CreateWindowFormRequest $request)
     {
-        Window::create($request->validated());
+        $request->validated();
+        $window_data = $request->only('name', 'description', 'user_id', 'is_active');
+        $services = $request->only('services');
+        $window = Window::create($window_data);
+        foreach ($services as $service) {
+            $window->services()->attach($service);
+        }
+
 
         return redirect('/windows');
     }
@@ -78,17 +97,39 @@ class WindowController extends Controller
      */
     public function edit(Window $window)
     {
-        $selected = Window::all()->pluck('transaction_id');
-        $services = Service::query()->whereNotIn('id', $selected)->get();
+        $users = User::all();
+
+        $services = Service::all()->map(fn ($service) => [
+            'id' => $service->id,
+            'type' => $service->type,
+            'selected' => false,
+        ]);
+
+        $service_data = [];
+
+        foreach ($services as $service) {
+            foreach ($window->services as $window_service) {
+                if ($service['id'] === $window_service->id) {
+                    $service['selected'] = true;
+                }
+                array_push($service_data, $service);
+            }
+        }
+
         return Inertia::render('App/Windows/Edit', [
-            'services' => $services,
+            'users' => $users->map(fn ($user) => [
+                'id' => $user->id,
+                'fullname' => $user->fullname(),
+                'selected' => $window->user_id === $user->id ? true : false,
+            ]),
+            'services' => $service_data,
             'window' => [
                 'id' => $window->id,
                 'name' => $window->name,
-                'service_id' => $window->service_id,
-                'service_type' => $window->service->type,
                 'description' => $window->description,
-                'is_active' => $window->is_active ? true : false,
+                'user_id' => $window->user_id,
+                'services' => $window->services->pluck('id'),
+                'is_active' => $window->is_active === 1 ? true : false,
             ]
         ]);
     }
@@ -102,7 +143,12 @@ class WindowController extends Controller
      */
     public function update(UpdateWindowFormRequest $request, Window $window)
     {
-        $window->update($request->validated());
+        $request->validated();
+        $window->update($request->only('name', 'description', 'user_id', 'is_active'));
+        $services = $request->only('services');
+        foreach ($services as $service) {
+            $window->services()->sync($service);
+        }
 
         return redirect('/windows');
     }

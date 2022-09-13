@@ -52,8 +52,14 @@ class User extends Authenticatable
     //     $this->attributes['password'] = bcrypt($password);
     // }
 
+
     public function window()
     {
         $this->hasOne(Window::class);
+    }
+
+    public function fullname()
+    {
+        return $this->firstname . ' ' . $this->lastname;
     }
 }

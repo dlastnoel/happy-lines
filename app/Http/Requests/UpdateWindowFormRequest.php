@@ -26,19 +26,23 @@ class UpdateWindowFormRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                'unique:windows,name,' . $this->id,
                 'string',
+                'unique:windows,name,' . $this->id,
                 'min:3',
                 'max:255'
             ],
-            'transaction_id' => [
+            'description' => 'required|string|min:3',
+            'user_id' => [
                 'required',
                 'integer',
-                'unique:windows,service_id,' . $this->id,
+                'unique:windows,user_id,' . $this->id,
             ],
-            'description' => 'required|string|min:3',
-            'is_occupied' => 'sometimes|nullable|boolean',
-            'is_active' => 'sometimes|nullable|boolean',
+            'services' => 'required|array',
+            'services.*' => [
+                'required',
+                'integer',
+            ],
+            'is_active' => 'required|boolean',
         ];
     }
 }

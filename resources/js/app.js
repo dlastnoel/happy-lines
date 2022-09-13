@@ -12,7 +12,7 @@ createInertiaApp({
     createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(Toast, {
-        timeout: 5000,
+        timeout: 3500,
         position: 'bottom-right',
         hideProgressBar: true,
         shareAppContext: true,

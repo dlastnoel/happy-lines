@@ -26,7 +26,7 @@ class UpdateServiceFormRequest extends FormRequest
         return [
             'type' => [
                 'required',
-                'unique:service,type,' . $this->id,
+                'unique:services,type,' . $this->id,
                 'string',
                 'min:3',
                 'max:255,'

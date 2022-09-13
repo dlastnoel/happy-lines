@@ -15,7 +15,8 @@
     <template v-if="windows.length">
       <div class="m-5 p-3 grid grid-cols-4 gap-4">
         <div class="flex justify-center" v-for="(window, i) in windows" :key="i">
-          <div class="w-full block p-6 rounded-lg shadow-lg bg-white max-w-sm transition duration-100 hover:bg-sky-100">
+          <div class="w-full block p-6 rounded-lg shadow-lg max-w-sm transition duration-100 hover:bg-sky-100"
+          :class="window.is_active ? 'bg-white' : 'bg-gray-300'">
             <!-- <div class="inline-block p-1 rounded bg-green-500">
               <span class="text-xs font-semibold">Occupied</span>
             </div> -->
@@ -28,6 +29,9 @@
               </Link>
             </div>
             <p class="text-base mb-4" v-text="window.description"/>
+            <div class="mt-1 p-1">
+              <p class="text-base" v-text="`Teller: ${window.user}`" />
+            </div>
           </div>
         </div>
       </div>
@@ -54,6 +58,10 @@ import emptyLottie from '@/../json/empty.json'
 export default {
   layout: AdminLayout,
 
+  props: {
+    windows: Object,
+  },
+
   components: {
     Breadcrumb,
     Vue3Lottie
@@ -65,9 +73,6 @@ export default {
     }
   },
 
-  props: {
-    windows: Array,
-  }
 }
 </script>
 

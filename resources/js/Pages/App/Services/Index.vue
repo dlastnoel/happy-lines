@@ -34,7 +34,7 @@
       <div class="w-1/2">
         <Vue3Lottie :animationData="emptyLottie" class="w-1/2"/>
       </div>
-      <p class="text-3xl">No created windows yet.</p>
+      <p class="text-3xl">No created services yet.</p>
     </div>
   </template>
   

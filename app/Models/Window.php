@@ -10,15 +10,14 @@ class Window extends Model
 {
     protected $fillable = [
         'name',
-        'transaction_id',
         'description',
-        'is_occupied',
+        'user_id',
         'is_active',
     ];
 
     public function services()
     {
-        return $this->belongsToMany(Service::class);
+        return $this->belongsToMany(Service::class)->withTimestamps();
     }
 
     public function user()

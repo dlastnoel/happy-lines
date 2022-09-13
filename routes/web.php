@@ -7,6 +7,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\WindowController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MenuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,9 @@ Route::get('/register/priority', function () {
     return Inertia::render('App/Register/Priority');
 });
 
-Route::get('/serving/', function () {
+Route::get('/serving', function () {
     return Inertia::render('App/Serving/Index');
 });
+
+Route::get('/main-menu', [MenuController::class, 'index']);
+Route::get('/main-menu/{select}', [MenuController::class, 'show']);

@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('service_window', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('service_id')->constrained()->onDelete('cascade');
-            $table->foreignId('window_id')->constrained()->onDelete('cascade');
+            $table->foreignId('service_id')->constrained();
+            $table->foreignId('window_id')->constrained();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('service_window');
+        Schema::dropIfExists('user_window');
     }
 };

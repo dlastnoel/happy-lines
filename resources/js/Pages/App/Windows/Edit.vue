@@ -16,6 +16,13 @@
   </div>
 
   <div class="m-5 p-3 shadow rounded bg-white">
+    {{services}}
+    <br>
+    <br>
+    {{users}}
+    <br>
+    <br>
+    {{window}}
     <form @submit.prevent="handleSubmit()">
       <div>
         <div class="my-2">
@@ -23,6 +30,8 @@
           <hr>
         </div>
         <div class="mt-2 w-full flex flex-col gap-3 p-2">
+
+          <!-- window name -->
           <label for="name">
             <span>Window Name</span>
             <input 
@@ -32,23 +41,6 @@
               v-model="window.name">
             <div v-if="v$.window.name.$error">
               <p class="text-md text-red-700">{{v$.window.name.$errors[0].$message}}</p>
-            </div>
-          </label>
-          <label for="transaction">
-            <span>Window For</span>
-            <select 
-              name="transaction" id="transaction" 
-              class="block w-full bg-white px-3 p-2 rounded border"
-               :class="v$.window.transaction_id.$error ? 'border-red-500' : 'border-sky-600'"
-              v-model="window.transaction_id">
-              <option :value="null" disabled>Select Transaction Type</option>
-              <option :value="window.transaction_id">{{window.transaction_type}}</option>
-              <template v-for="(transaction, i) in transactions" :key="i">
-                <option :value="transaction.id">{{transaction.type}}</option>
-              </template>
-            </select>
-            <div v-if="v$.window.transaction_id.$error">
-              <p class="text-md text-red-700">{{v$.window.transaction_id.$errors[0].$message}}</p>
             </div>
           </label>
           <label for="Description">
@@ -62,13 +54,57 @@
               <p class="text-md text-red-700">{{v$.window.description.$errors[0].$message}}</p>
             </div>
           </label>
+
+          <!-- window staff -->
+          <div>
+            <span>Window Staff</span>
+            <div 
+              class="p-2 flex justify-start items-center gap-3 border"
+              :class="v$.window.user_id.$error ? 'border-red-500' : 'border-sky-600'">
+              <button 
+                v-for="(staff, i) in users" :key="i"
+                class="p-2 rounded transition duration-75"
+                :class="staff.selected ? 
+                'text-white bg-green-500 hover:brightness-110' : 'text-black bg-gray-300 hover:brightness-95'"
+                @click.prevent="selectStaff(staff)">
+                {{staff.fullname}}
+              </button>
+            </div>
+            <div v-if="v$.window.user_id.$error">
+              <p class="text-md text-red-700">{{v$.window.user_id.$errors[0].$message}}</p>
+            </div>
+          </div>
+
+          <!-- window services -->
+          <div>
+            <span>Window Services</span>
+            <div
+              class="p-2 flex justify-start items-center gap-3 border"
+              :class="v$.window.services.$error ? 'border-red-500' : 'border-sky-600'">
+              <button 
+                v-for="(service, i) in services" :key="i"
+                class="p-2 rounded transition duration-75"
+                :class="service.selected ? 
+                'text-white bg-green-500 hover:brightness-110' : 'text-black bg-gray-300 hover:brightness-95'"
+                @click.prevent="selectService(service)">
+                {{service.type}}
+              </button>
+            </div>
+            <div v-if="v$.window.services.$error">
+              <p class="text-md text-red-700">{{v$.window.services.$errors[0].$message}}</p>
+            </div>
+          </div>
+
+          <!--  -->
           <div class="flex justify-between items-start">
+          <!-- status/set as active -->
             <label for="status">
               <input
                 type="checkbox" name="status" id="status" 
                 class="border-sky-600" v-model="window.is_active">
               <span class="ml-1">Set as Active</span>
             </label>
+            <!-- action buttons -->
             <div class="flex justify-center items-center gap-2 p-2">
               <!-- <button type="reset" class="block rounded p-3 font-semibold text-lg bg-gray-200 text-black hover:bg-gray-100 hover:cursor-pointer">Clear Fields</button> -->
               <button type="submit" class="block rounded p-3 font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">Update Window</button>
@@ -94,7 +130,10 @@ export default {
   },
 
   props: {
-    transactions: Object,
+    user: Object,
+    service: Object,
+    users: Object,
+    services: Object,
     window: Object,
   },
 
@@ -112,15 +151,12 @@ export default {
           required,
           minLength: minLength(3),
         },
-        transaction_id: {
-          required,
-          numeric,
-          minValue: minValue(1),
-        },
         description: {
           required,
           minLength: minLength(5),
         },
+        user_id: { required, numeric },
+        services: { required, },
       }
     }
   },
@@ -143,6 +179,53 @@ export default {
         })
       }
       this.submitted = false
+    },
+
+    selectStaff(staff) {
+      // loop through users object
+       for(const user in this.users) {
+
+        // check if current user in object matches param
+        if(this.users[user] === staff) {
+          // set current user with the other value of the param
+          this.users[user].selected = !staff.selected
+          
+          // checks if the current user is now selected
+          if(this.users[user].selected) {
+            // sets window user to the value of the current user selected
+            this.window.user_id = this.users[user].id
+          } else {
+            // if not clear the window user value
+            this.window.user_id = ''
+          }
+        } else {
+          // deselect the current user
+           this.users[user].selected = false
+        }
+       }
+    },
+
+    selectService(serviceItem) {
+      // loop through the services object
+      for(const service in this.services) {
+
+        // check if current service in object matches param
+        if(this.services[service] === serviceItem) {
+          // set current user with the other value of the param
+          this.services[service].selected = !serviceItem.selected
+
+          // checks if the current service is now selected
+          if(this.services[service].selected) {
+            // add service to window services
+            this.window.services.push(this.services[service].id)
+          } else {
+            // remove current service from window services
+            this.window.services = this.window.services.filter(function(value) {
+              return value != serviceItem.id
+            })
+          }
+        }
+       }
     },
 
     // clearFields() {
