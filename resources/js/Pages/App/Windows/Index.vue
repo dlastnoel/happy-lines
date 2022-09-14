@@ -30,7 +30,7 @@
             </div>
             <p class="text-base mb-4" v-text="window.description"/>
             <div class="mt-1 p-1">
-              <p class="text-base" v-text="`Teller: ${window.user}`" />
+              <p class="text-base" v-text="`Staff: ${window.user}`" />
             </div>
           </div>
         </div>

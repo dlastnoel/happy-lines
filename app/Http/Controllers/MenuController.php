@@ -20,13 +20,38 @@ class MenuController extends Controller
         ]);
     }
 
-    public function show(Service $service)
+    public function show($id)
     {
+        $service = Service::find($id);
         return Inertia::render('App/Menu/Select', [
+            'service' => $service,
             'windows' => $service->windows->map(fn ($window) => [
                 'id' => $window->id,
                 'name' => $window->name,
             ])
         ]);
+    }
+
+    public function register($id)
+    {
+        $window = Window::find($id);
+        return Inertia::render('App/Menu/Registration',  [
+            'window' => [
+                'id' => $window->id,
+                'name' => $window->name,
+            ],
+            'patient' => [
+                'unique_id' => '',
+                'fullname' => '',
+                'sex' => '',
+                'birthdate' => '',
+                'address' => '',
+                'contact_no' => '',
+            ]
+        ]);
+    }
+
+    public function queue(Request $request)
+    {
     }
 }

@@ -18,13 +18,13 @@
           <div class="h-[90%] w-full flex justify-center items-center">
             <div>
               <h1 class="text-6xl text-center">Welcome to Happy Lines!</h1>
-              <h3 class="text-4xl text-center">How may we help you?</h3>
+              <h3 class="text-4xl text-center">Select Window</h3>
               <div class="flex justify-center items-center gap-2">
-                <template v-for="(service, i) in services" :key="i">
+                <template v-for="(window, i) in windows" :key="i">
                   <Link 
                     class="p-2 rounded shadow text-lg text-white bg-sky-600 transition duration-75 hover:bg-sky-500"
-                    :href="`/main-menu/${service.id}`"> 
-                    {{service.type}}
+                    :href="`/main-menu/window/${window.id}`"> 
+                    {{window.name}}
                   </Link>
                 </template>
               </div>
@@ -45,6 +45,7 @@
         <h6 class="font-semibold text-white">Happy Patient Queuing Management System</h6>
       </div>
     </div>
+
   </div>
 
 </template>
@@ -60,7 +61,7 @@ export default {
   },
 
   props: {
-    services: Object,
+    windows: Object,
   },
 
   data() {

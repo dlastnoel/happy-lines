@@ -15,10 +15,11 @@
         <h3 class="text-4xl text-center">Select Window</h3>
         <div class="flex justify-center items-center gap-2">
           <!-- {{windows}} -->
+          <!-- {{service}} -->
           <template v-for="(window, i) in windows" :key="i">
             <Link 
               class="p-2 rounded shadow text-lg text-white bg-sky-600 transition duration-75 hover:bg-sky-500"
-              :href="`/main-menu/select/${window.id}`"> 
+              :href="`/main-menu/window/${window.id}`"> 
               {{window.name}}
             </Link>
           </template>

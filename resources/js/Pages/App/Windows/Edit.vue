@@ -16,13 +16,13 @@
   </div>
 
   <div class="m-5 p-3 shadow rounded bg-white">
-    {{services}}
+    <!-- {{services}}
     <br>
     <br>
     {{users}}
     <br>
     <br>
-    {{window}}
+    {{window}} -->
     <form @submit.prevent="handleSubmit()">
       <div>
         <div class="my-2">
@@ -131,7 +131,6 @@ export default {
 
   props: {
     user: Object,
-    service: Object,
     users: Object,
     services: Object,
     window: Object,

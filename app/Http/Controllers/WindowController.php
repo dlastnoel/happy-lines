@@ -112,8 +112,8 @@ class WindowController extends Controller
                 if ($service['id'] === $window_service->id) {
                     $service['selected'] = true;
                 }
-                array_push($service_data, $service);
             }
+            array_push($service_data, $service);
         }
 
         return Inertia::render('App/Windows/Edit', [

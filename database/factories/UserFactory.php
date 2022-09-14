@@ -18,8 +18,8 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'firstname' => 'Admin',
-            'lastname' => 'Admin',
+            'firstname' => 'Happy',
+            'lastname' => 'Patient',
             'contact_no' => '09987654321',
             'email' => 'admin@happylines.com',
             'username' => 'admin',

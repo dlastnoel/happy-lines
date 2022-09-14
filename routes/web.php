@@ -8,6 +8,7 @@ use App\Http\Controllers\WindowController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\QueueController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,7 +56,7 @@ Route::middleware('auth')->group(function () {
 
 
 // client-side registration
-Route::get('register/regular', function () {
+Route::get('/register/regular', function () {
     return Inertia::render('App/Register/Regular');
 });
 
@@ -67,5 +68,12 @@ Route::get('/serving', function () {
     return Inertia::render('App/Serving/Index');
 });
 
+// client-side registration
 Route::get('/main-menu', [MenuController::class, 'index']);
 Route::get('/main-menu/{select}', [MenuController::class, 'show']);
+Route::get('/main-menu/window/{window}', [MenuController::class, 'register']);
+Route::post('/main-menu/queue', [MenuController::class, 'queue']);
+
+// queing monitor
+Route::get('/queues', [QueueController::class, 'index']);
+Route::get('/queues/{window}', [QueueController::class, 'show']);
