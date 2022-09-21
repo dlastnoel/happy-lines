@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('patient_window_user', function (Blueprint $table) {
+        Schema::create('patient_user_window', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->nullable();
+            $table->foreignId('patient_id')->constrained();
             $table->foreignId('window_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->nullable();
             $table->timestamps();
         });
     }

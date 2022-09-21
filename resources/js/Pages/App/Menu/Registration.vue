@@ -16,7 +16,6 @@
             <div>
               <h1 class="text-6xl text-center" v-text="window.name" />
               <h3 class="text-4xl text-center">Register Here</h3>
-              <!-- {{patient}} -->
               <form class="mt-4 grid grid-cols-2 gap-3" @submit.prevent="handleSubmit()">
                 <!-- unique_id -->
                 <div class="mt-3">
@@ -24,10 +23,10 @@
                     <div class="flex justify-start items-center gap-2">
                       <span class="text-md">ID</span>
                       <button
-                        type="submit" :disabled="!hasId"
-                        class="rounded p-1 text-xs  text-white "
-                        :class="!hasId ? 'bg-gray-300' : 'bg-sky-600 hover:bg-sky-500 hover:cursor-pointer'">
-                      	&#x2713;
+                        type="click" :disabled="!hasId" class="rounded p-1 text-xs  text-white "
+                        :class="!hasId ? 'bg-gray-300' : 'bg-sky-600 hover:bg-sky-500 hover:cursor-pointer'"
+                        @click.prevent="handleChecking()">
+                        &#x2713;
                       </button>
                     </div>
                     <input
@@ -56,7 +55,7 @@
                 <div class="mt-3">
                   <p class="text-md">Sex</p>
                   <div
-                    class="border-2 p-2 rounded"
+                    class="border-2 p-2 rounded mt-1"
                     :class="v$.patient.sex.$error ? 'border-red-500' : 'border-sky-600'">
                     <div class="flex justify-start items-center gap-2">
                       <label for="male">
@@ -120,7 +119,11 @@
 
                 <!-- actions -->
                 <div class="mt-5 col-span-2">
-                  <input type="submit" class="block w-full rounded p-2 text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer" value="Register">
+                  <input 
+                    type="submit" :disabled="!isRegistrationOpen"
+                    class="block w-full rounded p-2 text-lg bg-sky-600 text-white "
+                    :class="isRegistrationOpen ? 'hover:bg-sky-500 hover:cursor-pointer' : 'bg-gray-300'"
+                    :value="(patient.unique_id && isRegistrationOpen) ? 'Proceed' : 'Register' " >
                 </div>
               </form>
             </div>
@@ -147,7 +150,7 @@ import { Vue3Lottie } from 'vue3-lottie'
 import 'vue3-lottie/dist/style.css'
 import doctorLottie from '@/../json/doctor.json'
 import useVuelidate from '@vuelidate/core'
-import { required, maxValue, numeric, minLength, maxLength} from '@vuelidate/validators'
+import { required, numeric, minLength, maxLength} from '@vuelidate/validators'
 
 
 export default {
@@ -156,6 +159,8 @@ export default {
   },
 
   props: {
+    test: String,
+    toast: Object,
     window: Object,
     patient: Object,
   },
@@ -164,6 +169,8 @@ export default {
     return {
       v$: useVuelidate(),
       hasId: false,
+      isRegistrationOpen: true,
+      isIdSubmitted: false,
       doctorLottie,
     }
   },
@@ -175,9 +182,6 @@ export default {
         sex: { required, },
         birthdate: {
           required,
-          maxValue: value => {
-            console.log(value)
-          }
         },
         address: { required },
         contact_no: { 
@@ -193,12 +197,49 @@ export default {
   methods: {
     handleSubmit() {
       this.v$.$validate()
+      if(!this.v$.$error) {
+        const data = {
+          'patient': this.patient,
+          'window_id': this.window.id,
+        }
+        this.$inertia.post('/queue/patient', data, {
+          onError: (errors) => {
+            for(const error in errors) {
+              this.showToast(`${errors[error]}`, 'error')  
+            }
+            this.showToast('Error in registration process', 'error')
+          },
+          onSuccess: () => {
+            this.showToast('Succesfully registered', 'success')
+          }
+      })
+      }
     },
+
+    handleChecking() {
+      const data = {
+        'unique_id': this.patient.unique_id,
+        'window_id': this.window.id,
+      }
+      this.$inertia.post('/check', data, {
+        onSuccess: () => {
+          if(this.toast.message && this.toast.message.length) {
+          this.showToast(this.toast.message, this.toast.toast_type)
+          } else {
+            this.isRegistrationOpen = true
+          }
+        }
+      })
+    },
+
     validateId() {
       if(this.patient.unique_id.length) {
         this.hasId = true
+        this.isRegistrationOpen = false
+
       } else {
         this.hasId = false
+        this.isRegistrationOpen = true
       }
     },
   }

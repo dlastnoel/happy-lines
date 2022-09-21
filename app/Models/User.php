@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+use App\Models\Window;
+use App\Models\Patient;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -55,11 +58,21 @@ class User extends Authenticatable
 
     public function window()
     {
-        $this->hasOne(Window::class);
+        return $this->hasOne(Window::class);
     }
 
     public function fullname()
     {
         return $this->firstname . ' ' . $this->lastname;
+    }
+
+    public function windows()
+    {
+        return $this->belongsToMany(Window::class, 'patient_user_window')->withTimestamps();
+    }
+
+    public function patients()
+    {
+        return $this->belongsToMany(Patient::class, 'patient_user_window');
     }
 }

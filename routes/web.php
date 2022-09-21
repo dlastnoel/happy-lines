@@ -9,6 +9,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\QueueController;
+use App\Http\Controllers\ServiceSelectController;
+use App\Http\Controllers\WindowQueuePatientController;
+use App\Http\Controllers\WindowCheckPatientController;
+use App\Http\Controllers\WindowRegistrationController;
+use App\Http\Controllers\WindowSelectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,11 +73,20 @@ Route::get('/serving', function () {
     return Inertia::render('App/Serving/Index');
 });
 
-// client-side registration
-Route::get('/main-menu', [MenuController::class, 'index']);
-Route::get('/main-menu/{select}', [MenuController::class, 'show']);
-Route::get('/main-menu/window/{window}', [MenuController::class, 'register']);
-Route::post('/main-menu/queue', [MenuController::class, 'queue']);
+// // client-side registration
+// Route::get('/service/select', ServiceSelectController::class);
+// Route::get('/window/{service}/select', WindowSelectController::class);
+// Route::get('window/{window}/register', WindowRegistrationController::class);
+// Route::post('/check', WindowCheckPatientController::class);
+// Route::post('/queue/patient', WindowQueuePatientController::class);
+
+Route::get('/service/select', [MenuController::class, 'index']);
+Route::get('/window/{service}/select', [MenuController::class, 'show']);
+Route::get('/register/{window}/{patient?}', [MenuController::class, 'register'])
+    ->name('register');
+Route::post('/check', [MenuController::class, 'check']);
+Route::post('/queue/patient', [MenuController::class, 'queue']);
+Route::get('/message', [MenuController::class, 'message']);
 
 // queing monitor
 Route::get('/queues', [QueueController::class, 'index']);

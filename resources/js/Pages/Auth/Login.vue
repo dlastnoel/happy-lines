@@ -56,7 +56,7 @@
             <Link href="/queues" class="block rounded p-2 shadow text-sm bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">
               Open Queues
             </Link>
-            <Link href="/main-menu" class="block rounded p-2 shadow text-sm bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">
+            <Link href="/service/select" class="block rounded p-2 shadow text-sm bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">
               Open Main Menu
             </Link>
           </div>

@@ -23,7 +23,7 @@
                 <template v-for="(service, i) in services" :key="i">
                   <Link 
                     class="p-2 rounded shadow text-lg text-white bg-sky-600 transition duration-75 hover:bg-sky-500"
-                    :href="`/main-menu/${service.id}`"> 
+                    :href="`/window/${service.id}/select`"> 
                     {{service.type}}
                   </Link>
                 </template>
