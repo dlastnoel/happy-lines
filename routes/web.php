@@ -7,13 +7,10 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\WindowController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LoginViewController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\QueueController;
-use App\Http\Controllers\ServiceSelectController;
-use App\Http\Controllers\WindowQueuePatientController;
-use App\Http\Controllers\WindowCheckPatientController;
-use App\Http\Controllers\WindowRegistrationController;
-use App\Http\Controllers\WindowSelectController;
+use App\Http\Controllers\StaffWindowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,17 +23,21 @@ use App\Http\Controllers\WindowSelectController;
 |
 */
 
-Route::get('/login', function () {
-    return Inertia::render('Auth/Login');
-})
+Route::get('/login', LoginViewController::class)
     ->name('login');
+// Route::get('/login', function () {
+//     return Inertia::render('Auth/Login');
+// })
+//     ->name('login');
 // Route::post('/login', [LoginController::class, 'login']);
 
 
 // Grouped with auth middleware
 Route::middleware('auth')->group(function () {
 
-    Route::get('/', DashboardController::class);
+    // dashboard
+    Route::get('/', [DashboardController::class, 'admin']);
+    Route::get('/dashboard/staff', [DashboardController::class, 'staff']);
 
     Route::get('/records', function () {
         return Inertia::render('App/Records/Index');
@@ -46,9 +47,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/staffs', [UserController::class, 'index']);
     Route::post('/staffs', [UserController::class, 'store']);
     Route::get('/staffs/register', [UserController::class, 'register']);
-    Route::get('/staffs/register', function () {
-        return Inertia::render('App/Staffs/Register');
-    });
     Route::get('/staffs/{user}/edit', [UserController::class, 'edit']);
     Route::put('/staffs/{user}', [UserController::class, 'update']);
 
@@ -57,6 +55,10 @@ Route::middleware('auth')->group(function () {
 
     // services
     Route::resource('services', ServiceController::class);
+
+    // staff window (queueing)
+    Route::get('/queues/{window}', [QueueController::class, 'serve']);
+    Route::post('/queues/{window}', [QueueController::class, 'update']);
 });
 
 
@@ -80,8 +82,8 @@ Route::get('/serving', function () {
 // Route::post('/check', WindowCheckPatientController::class);
 // Route::post('/queue/patient', WindowQueuePatientController::class);
 
-Route::get('/service/select', [MenuController::class, 'index']);
-Route::get('/window/{service}/select', [MenuController::class, 'show']);
+Route::get('/service/select', [MenuController::class, 'service']);
+Route::get('/window/{service}/select', [MenuController::class, 'window']);
 Route::get('/register/{window}/{patient?}', [MenuController::class, 'register'])
     ->name('register');
 Route::post('/check', [MenuController::class, 'check']);
@@ -90,4 +92,4 @@ Route::get('/message', [MenuController::class, 'message']);
 
 // queing monitor
 Route::get('/queues', [QueueController::class, 'index']);
-Route::get('/queues/{window}', [QueueController::class, 'show']);
+Route::get('/queues/{window}/show', [QueueController::class, 'show']);

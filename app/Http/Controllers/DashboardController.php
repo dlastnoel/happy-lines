@@ -5,17 +5,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+use App\Models\Window;
 
 class DashboardController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function __invoke(Request $request)
+    //
+    public function admin()
     {
-        return Inertia::render('App/Dashboard');
+        return Inertia::render('App/Dashboard/Admin', [
+            'auth' => getAuthUser(),
+        ]);
+    }
+
+    public function staff()
+    {
+        $window = auth()->user()->window;
+        return Inertia::render('App/Dashboard/Staff', [
+            'auth' => getAuthUser(),
+            'window' => getAuthUserWindow(),
+        ]);
     }
 }

@@ -21,6 +21,7 @@ class ServiceController extends Controller
     {
 
         return Inertia::render('App/Services/Index', [
+            'auth' => getAuthUser(),
             'services' => Service::all()->map(fn ($service) => [
                 'id' => $service->id,
                 'type' => $service->type,
@@ -36,7 +37,9 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        return Inertia::render('App/Services/Create');
+        return Inertia::render('App/Services/Create', [
+            'auth' => getAuthUser(),
+        ]);
     }
 
     /**
@@ -72,6 +75,7 @@ class ServiceController extends Controller
     public function edit(Service $service)
     {
         return Inertia::render('App/Services/Edit', [
+            'auth' => getAuthUser(),
             'service' =>  [
                 'id' => $service->id,
                 'type' => $service->type,
@@ -90,7 +94,6 @@ class ServiceController extends Controller
     public function update(UpdateServiceFormRequest $request, Service $service)
     {
         $service->update($request->validated());
-
         return redirect('/services');
     }
 

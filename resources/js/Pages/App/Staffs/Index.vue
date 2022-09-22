@@ -1,4 +1,4 @@
-<template>
+<template :auth="auth" :window="window">
   <Head>
     <title>Staffs</title>
   </Head>
@@ -71,6 +71,15 @@ export default {
   },
 
   props: {
+    auth: Object,
+    window: {
+      type: Object,
+      required: false,
+      default: {
+        id: '',
+        name: '',        
+      }
+    },
     users: Object
   },
 

@@ -19,4 +19,12 @@ class QueueController extends Controller
             ]),
         ]);
     }
+
+    public function serve($id)
+    {
+        return Inertia::render('App/Queues/Serve', [
+            'auth' => getAuthUser(),
+            'window' => getAuthUserWindow(),
+        ]);
+    }
 }

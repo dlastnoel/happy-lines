@@ -10,8 +10,10 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Fortify;
 use Inertia\Inertia;
+
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -22,7 +24,20 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->instance(LoginResponse::class, new class implements LoginResponse
+        {
+            public function toResponse($request)
+            {
+                if (auth()->check()) {
+                    if (auth()->user()->role === 'admin') {
+                        return redirect('/');
+                    } else if (auth()->user()->role === 'staff') {
+                        return redirect('/dashboard/staff');
+                    }
+                }
+                return Inertia::render('Auth/Login');
+            }
+        });
     }
 
     /**
@@ -36,10 +51,6 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
-
-        Fortify::loginView(function () {
-            return Inertia::render('Auth/Login');
-        });
 
         RateLimiter::for('login', function (Request $request) {
             $email = (string) $request->email;

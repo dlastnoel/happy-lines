@@ -21,6 +21,7 @@ class UserController extends Controller
     public function index()
     {
         return Inertia::render('App/Staffs/Index', [
+            'auth' => getAuthUser(),
             'users' => User::where('role', 'staff')->get()->map(fn ($user) => [
                 'id' => $user->id,
                 'fullname' => $user->firstname . ' ' . $user->lastname,
@@ -39,7 +40,9 @@ class UserController extends Controller
      */
     public function register()
     {
-        return Inertia::render('App/Staffs/Register');
+        return Inertia::render('App/Staffs/Register', [
+            'auth' => getAuthUser(),
+        ]);
     }
 
     /**
@@ -77,6 +80,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         return Inertia::render('App/Staffs/Edit', [
+            'auth' => getAuthUser(),
             'staff' => [
                 'id' => $user->id,
                 'firstname' => $user->firstname,
@@ -102,7 +106,6 @@ class UserController extends Controller
     public function update(UpdateUserFormRequest $request, User $user)
     {
         $user->update($request->validated());
-
         return redirect('/staffs');
     }
 

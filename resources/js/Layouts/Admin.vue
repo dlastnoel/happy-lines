@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="flex grid-cols-2">
-      <Sidebar/>
+      <Sidebar :auth="auth" :window="window"/>
       <div class="flex flex-col w-full bg-gray-100">
-        <Navbar/>
+        <Navbar :auth="auth"/>
         <div class="p-3">
           <slot/>
         </div>
@@ -16,6 +16,19 @@
 import Navbar from '../Components/Navbar.vue'
 import Sidebar from '../Components/Sidebar.vue'
 export default {
+
+  props: {
+    auth: Object,
+    window: {
+      type: Object,
+      required: true,
+      default: {
+        id: '',
+        name: '',
+      }
+    }
+  },
+
   components: {
     Navbar,
     Sidebar,

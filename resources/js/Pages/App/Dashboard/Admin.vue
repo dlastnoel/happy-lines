@@ -1,16 +1,16 @@
 <template :auth="auth" :window="window">
   <Head>
-    <title>Queue Records</title>
+    <title>Dashboard</title>
   </Head>
   <div>
+    <h1 class="text-9xl">Dashboard Admin</h1>
   </div>
 </template>
 
 <script>
-import AdminLayout from '../../../Layouts/Admin.vue'
-export default {
+import AdminLayout from '@/Layouts/Admin.vue'
 
-  layout: AdminLayout,
+export default {
 
   props: {
     auth: Object,
@@ -22,9 +22,9 @@ export default {
         name: '',        
       }
     }
-  }
-
-
+  },
+  
+  layout: AdminLayout
 }
 </script>
 

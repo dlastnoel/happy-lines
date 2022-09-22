@@ -22,6 +22,7 @@ class WindowController extends Controller
     public function index()
     {
         return Inertia::render('App/Windows/Index', [
+            'auth' => getAuthUser(),
             'windows' => Window::all()->map(fn ($window) => [
                 'id' => $window->id,
                 'name' => $window->name,
@@ -45,6 +46,7 @@ class WindowController extends Controller
         $users = User::query()->whereNotIn('id', $tellers)->get();
 
         return Inertia::render('App/Windows/Create', [
+            'auth' => getAuthUser(),
             'users' => $users->map(fn ($user) => [
                 'id' => $user->id,
                 'fullname' => $user->fullname(),
@@ -100,6 +102,7 @@ class WindowController extends Controller
         $users = User::all();
 
         $services = Service::all()->map(fn ($service) => [
+            'auth' => getAuthUser(),
             'id' => $service->id,
             'type' => $service->type,
             'selected' => false,
@@ -117,6 +120,7 @@ class WindowController extends Controller
         }
 
         return Inertia::render('App/Windows/Edit', [
+            'auth' => getAuthUser(),
             'users' => $users->map(fn ($user) => [
                 'id' => $user->id,
                 'fullname' => $user->fullname(),

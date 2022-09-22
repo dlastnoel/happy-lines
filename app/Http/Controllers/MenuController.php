@@ -12,13 +12,11 @@ use App\Models\Patient;
 use App\Http\Requests\CheckPatientIdFormRequest;
 use App\Http\Requests\QueuePatientFormRequest;
 
-use function PHPUnit\Framework\isNull;
-
 class MenuController extends Controller
 {
-    public function index()
+    public function service()
     {
-        return Inertia::render('App/Menu/Index', [
+        return Inertia::render('App/Menu/Service', [
             'services' => Service::all()->map(fn ($service) => [
                 'id' => $service->id,
                 'type' => $service->type,
@@ -26,10 +24,10 @@ class MenuController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function window($id)
     {
         $service = Service::find($id);
-        return Inertia::render('App/Menu/Select', [
+        return Inertia::render('App/Menu/Window', [
             'service' => $service,
             'windows' => $service->windows->map(fn ($window) => [
                 'id' => $window->id,

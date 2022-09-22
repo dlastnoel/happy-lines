@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('patient_id')->constrained();
             $table->foreignId('window_id')->constrained();
             $table->foreignId('user_id')->nullable();
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

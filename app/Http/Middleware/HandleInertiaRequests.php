@@ -41,10 +41,6 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn () => $request->session()->get('message'),
                 'toast_type' => fn () => $request->session()->get('toast_type'),
             ],
-            'auth' => [
-                'user' => fn () => $request->session()->get('user'),
-                'role' => fn () => $request->session()->get('role'),
-            ]
         ]);
     }
 }
