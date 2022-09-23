@@ -17,12 +17,14 @@
         <div class="h-full w-full flex flex-col justify-center items-center">
           <div class="w-full flex flex-col justify-center items-center h-[90%]">
             <!-- <h1 class="text-6xl text-center">Happy Lines</h1> -->
-            <h3 class="text-5xl text-center">Great! You are now on queue.</h3>
+            <h3 class="text-5xl text-center">You are now on queue. Please wait for your number to be called.</h3>
             <div class="mt-12 min-w-[400px] rounded shadow p-5 bg-sky-600">
-              <p class="text-5xl text-center text-white">Window 1</p>
-              <p class="text-8xl text-center text-white">58</p>
-              <p class="text-5xl text-center text-white">John Doe</p>
+              <p class="text-5xl text-center text-white">{{queue.window}}</p>
+              <p class="my-8 text-9xl text-center text-white">{{queue.number}}</p>
+              <p class="text-5xl text-center text-white">{{queue.user.fullname}}</p>
+              <p v-if="queue.user.unique_id" class="text-3xl text-center text-white">{{queue.user.unique_id}}</p>
             </div>
+            <Link href="/service/select" class="block rounded p-3 text-center w-[400px] sm:w-[400px] md:w-[350px] lg:w-[400px] font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">Back to Main Menu</Link>
           </div>
         </div>
       </div>
@@ -46,6 +48,10 @@ import doctorLottie from '@/../json/doctor.json'
 export default {
   components: {
     Vue3Lottie
+  },
+
+  props: {
+    queue: Object,
   },
 
   data() {

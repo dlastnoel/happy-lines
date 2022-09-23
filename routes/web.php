@@ -8,7 +8,7 @@ use App\Http\Controllers\WindowController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginViewController;
-use App\Http\Controllers\MenuController;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\StaffWindowController;
 
@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
     // staff window (queueing)
     Route::get('/queues/{window}', [QueueController::class, 'serve']);
     Route::post('/queues/{window}', [QueueController::class, 'update']);
+    Route::get('/queues/{window}/{patient}/next', [QueueController::class, 'next']);
 });
 
 
@@ -82,13 +83,14 @@ Route::get('/serving', function () {
 // Route::post('/check', WindowCheckPatientController::class);
 // Route::post('/queue/patient', WindowQueuePatientController::class);
 
-Route::get('/service/select', [MenuController::class, 'service']);
-Route::get('/window/{service}/select', [MenuController::class, 'window']);
-Route::get('/register/{window}/{patient?}', [MenuController::class, 'register'])
+Route::get('/service/select', [RegistrationController::class, 'service']);
+Route::get('/window/{service}/select', [RegistrationController::class, 'window']);
+Route::get('/register/{window}/{patient?}', [RegistrationController::class, 'register'])
     ->name('register');
-Route::post('/check', [MenuController::class, 'check']);
-Route::post('/queue/patient', [MenuController::class, 'queue']);
-Route::get('/message', [MenuController::class, 'message']);
+Route::post('/check', [RegistrationController::class, 'check']);
+Route::post('/queue/patient', [RegistrationController::class, 'queue']);
+Route::get('/message', [RegistrationController::class, 'message'])
+    ->name('message');
 
 // queing monitor
 Route::get('/queues', [QueueController::class, 'index']);

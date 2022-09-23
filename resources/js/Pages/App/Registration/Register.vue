@@ -129,7 +129,7 @@
             </div>
           </div>
           <div class="w-full h-[10%] flex justify-end items-end gap-2 p-2">
-            <Link href="/main-menu" class="block rounded p-2 shadow text-sm bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">
+            <Link href="/service/select" class="block rounded p-2 shadow text-sm bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">
               Back to Main Menu
             </Link>
           </div>

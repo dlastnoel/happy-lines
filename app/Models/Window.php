@@ -8,6 +8,7 @@ use App\Models\Transaction;
 
 use App\Models\User;
 use App\Models\Patient;
+use Carbon\Carbon;
 
 class Window extends Model
 {
@@ -36,6 +37,25 @@ class Window extends Model
     public function patients()
     {
         return $this->belongsToMany(Patient::class, 'patient_user_window');
+    }
+
+    public function latest_patients()
+    {
+        // return patients of today
+        return $this->belongsToMany(Patient::class, 'patient_user_window')
+            ->withTimestamps()
+            ->wherePivot('updated_at', '>=', Carbon::today()->toDateString())
+            ->withPivot('number');
+    }
+
+    public function window_patient($patient_id)
+    {
+        // return patients of today
+        return $this->belongsToMany(Patient::class, 'patient_user_window')
+            ->withTimestamps()
+            ->wherePivot('patient_id', $patient_id)
+            ->wherePivot('status', 'pending')
+            ->withPivot('status');
     }
 
     use HasFactory;

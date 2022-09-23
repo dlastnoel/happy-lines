@@ -51,7 +51,6 @@ class ServiceController extends Controller
     public function store(CreateServiceFormRequest $request)
     {
         Service::create($request->validated());
-
         return redirect('/services');
     }
 

@@ -40,11 +40,14 @@ class WindowController extends Controller
      */
     public function create()
     {
+        // get all services
         $services = Service::all();
-
+        // get all users in all windows
         $tellers = Window::all()->pluck('user_id');
+        // get all users that do not have a window
         $users = User::query()->whereNotIn('id', $tellers)->get();
 
+        // return view
         return Inertia::render('App/Windows/Create', [
             'auth' => getAuthUser(),
             'users' => $users->map(fn ($user) => [

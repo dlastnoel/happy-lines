@@ -15,10 +15,16 @@ class LoginViewController extends Controller
      */
     public function __invoke(Request $request)
     {
+        // check authenticated user
         if (auth()->check()) {
+
+            // if admin
             if (auth()->user()->role === 'admin') {
                 return redirect('/');
-            } else if (auth()->user()->role === 'staff') {
+            }
+
+            // if staff
+            else if (auth()->user()->role === 'staff') {
                 return redirect('/dashboard/staff');
             }
         }

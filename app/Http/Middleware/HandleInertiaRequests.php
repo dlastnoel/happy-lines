@@ -41,6 +41,14 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn () => $request->session()->get('message'),
                 'toast_type' => fn () => $request->session()->get('toast_type'),
             ],
+            'queue' => [
+                'window' => fn () => $request->session()->get('window'),
+                'number' => fn () => $request->session()->get('number'),
+                'user' => [
+                    'unique_id' => fn () => $request->session()->get('unique_id'),
+                    'fullname' => fn () => $request->session()->get('fullname')
+                ],
+            ]
         ]);
     }
 }

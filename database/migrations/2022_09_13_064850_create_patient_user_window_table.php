@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('patient_user_window', function (Blueprint $table) {
             $table->id();
+            $table->integer('number');
             $table->foreignId('patient_id')->constrained();
             $table->foreignId('window_id')->constrained();
             $table->foreignId('user_id')->nullable();

@@ -11,12 +11,15 @@ use App\Models\Patient;
 
 use App\Http\Requests\CheckPatientIdFormRequest;
 use App\Http\Requests\QueuePatientFormRequest;
+use Carbon\Carbon;
+use Exception;
 
-class MenuController extends Controller
+class RegistrationController extends Controller
 {
     public function service()
     {
-        return Inertia::render('App/Menu/Service', [
+        // return view with services
+        return Inertia::render('App/Registration/Service', [
             'services' => Service::all()->map(fn ($service) => [
                 'id' => $service->id,
                 'type' => $service->type,
@@ -26,8 +29,11 @@ class MenuController extends Controller
 
     public function window($id)
     {
+        // find service
         $service = Service::find($id);
-        return Inertia::render('App/Menu/Window', [
+
+        // return view with windows associated with the service data
+        return Inertia::render('App/Registration/Window', [
             'service' => $service,
             'windows' => $service->windows->map(fn ($window) => [
                 'id' => $window->id,
@@ -38,9 +44,14 @@ class MenuController extends Controller
 
     public function register($id, $patient_id = null)
     {
+        // find window
         $window = Window::find($id);
+
+        // check for patient id
         if (!isset($patient_id)) {
-            return Inertia::render('App/Menu/Registration',  [
+
+            // return view with window and empty patient
+            return Inertia::render('App/Registration/Register',  [
                 'window' => [
                     'id' => $window->id,
                     'name' => $window->name,
@@ -55,8 +66,11 @@ class MenuController extends Controller
                 ],
             ]);
         } else {
+            // check for patient
             $patient = Patient::where('unique_id', $patient_id)->first();
-            return Inertia::render('App/Menu/Registration',  [
+
+            // return view with window and patient
+            return Inertia::render('App/Registration/Register',  [
                 'window' => [
                     'id' => $window->id,
                     'name' => $window->name,
@@ -76,13 +90,23 @@ class MenuController extends Controller
     public function check(CheckPatientIdFormRequest $request)
     {
         $request->validated();
+
+        // find patient with request unique_id
         $patient = Patient::where('unique_id', $request['unique_id']);
+
+        // if patient exists
         if ($patient->exists()) {
+
+            // redirect to register with window and patient
             return redirect()->route('register', [
                 'window' => $request['window_id'],
                 'patient' => $request['unique_id'],
             ]);
-        } else {
+        }
+
+        // if not exists
+        else {
+            // return view with error message
             return redirect()->route('register', [
                 'window' => $request['window_id'],
             ])
@@ -93,31 +117,69 @@ class MenuController extends Controller
 
     public function queue(QueuePatientFormRequest $request)
     {
+        // validate request
         $request->validated();
+
+        // get patient registration data
+        $patient_data = $request['patient'];
+
+        // find active window
+        $window = Window::find($request['window_id']);
+
+        // set initial queue number to 1
+        $number = 1;
+
+        // get latest number from pivot
+        try {
+            $number = $window->latest_patients()->orderBy('pivot_number', 'desc')->first()->pivot->number;
+            $number++;
+        } catch (Exception $ex) {
+            // number set back to 1
+        }
+
+        // empty data means patient has no existing record
         if (empty($request['patient']['unique_id'])) {
-            $patient_data = $request['patient'];
+
+            // generate id and check for duplicates
             $generated_id = generateId();
             $exists = Patient::where('unique_id', $generated_id)->exists();
             while ($exists) {
                 $generated_id = generateId();
                 $exists = Patient::where('unique_id', generateId())->exists();
             }
+
+            // set generated id to patient registration data
             $patient_data['unique_id'] = $generated_id;
+
+            // create patient
             $patient = Patient::create($patient_data);
-            $patient->windows()->attach($request['window_id']);
+            // queue patient to requested window
+            $patient->windows()->attach($request['window_id'], ['number' => $number]);
 
-            return redirect('/message');
-        } else {
-            $patient_data = $request['patient'];
+            return redirect()->route('message')
+                ->with('window', $window->name)
+                ->with('number', $number)
+                ->with('unique_id', $patient->unique_id)
+                ->with('fullname', $patient->fullname);
+        }
+
+        // patient has existing record
+        else {
+            // find patient
             $patient = Patient::where('unique_id', $patient_data['unique_id'])->first();
-            $patient->windows()->attach($request['window_id']);
+            // queue patient to requested window
+            $patient->windows()->attach($request['window_id'], ['number' => $number]);
 
-            return redirect('/message');
+            // redirect
+            return redirect()->route('message')
+                ->with('window', $window->name)
+                ->with('number', $number)
+                ->with('fullname', $patient->fullname);
         }
     }
 
     public function message()
     {
-        return Inertia::render('App/Menu/Message');
+        return Inertia::render('App/Registration/Message');
     }
 }

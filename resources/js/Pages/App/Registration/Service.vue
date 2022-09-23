@@ -16,7 +16,7 @@
         </div>
         <div class="h-full w-full flex flex-col justify-center items-center">
           <div class="h-[90%] w-full flex justify-center items-center">
-            <div>
+            <div class="grid place-content-center gap-3">
               <h1 class="text-6xl text-center">Welcome to Happy Lines!</h1>
               <h3 class="text-4xl text-center">How may we help you?</h3>
               <div class="flex justify-center items-center gap-2">
