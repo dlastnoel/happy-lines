@@ -48,13 +48,17 @@ if (!function_exists('getAuthUserWindow')) {
 
   function getAuthUserWindow()
   {
-    return [
-      'id' => Auth::user()->window->id,
-      'name' => Auth::user()->window->name,
-      'services' => Auth::user()->window->services->map(fn ($service) => [
-        'id' => $service->id,
-        'type' => $service->type
-      ]),
-    ];
+    try {
+      return [
+        'id' => Auth::user()->window->id,
+        'name' => Auth::user()->window->name,
+        'services' => Auth::user()->window->services->map(fn ($service) => [
+          'id' => $service->id,
+          'type' => $service->type
+        ]),
+      ];
+    } catch (Exception $ex) {
+      // no window
+    }
   }
 }

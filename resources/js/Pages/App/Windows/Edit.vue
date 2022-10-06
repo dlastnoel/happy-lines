@@ -16,13 +16,6 @@
   </div>
 
   <div class="m-5 p-3 shadow rounded bg-white">
-    <!-- {{services}}
-    <br>
-    <br>
-    {{users}}
-    <br>
-    <br>
-    {{window}} -->
     <form @submit.prevent="handleSubmit()">
       <div>
         <div class="my-2">
@@ -55,27 +48,54 @@
             </div>
           </label>
 
-          <!-- window staff -->
           <div>
-            <span>Window Staff</span>
             <div 
-              class="p-2 flex justify-start items-center gap-3 border"
+              class="p-2 border rounded"
               :class="v$.window.user_id.$error ? 'border-red-500' : 'border-sky-600'">
-              <button 
-                v-for="(staff, i) in users" :key="i"
-                class="p-2 rounded transition duration-75"
-                :class="staff.selected ? 
-                'text-white bg-green-500 hover:brightness-110' : 'text-black bg-gray-300 hover:brightness-95'"
-                @click.prevent="selectStaff(staff)">
-                {{staff.fullname}}
-              </button>
+              <!-- staff -->
+              <template v-if="staffCount > 0">
+                <span>Window Staff</span>
+                <div class="flex justify-start items-center gap-3">
+                  <template v-for="(staff, i) in users" :key="i">
+                    <template v-if="staff.role === 'staff' || staff.role === 'admin'">
+                      <button 
+                        class="p-2 rounded transition duration-75"
+                        :class="staff.selected ? 
+                        'text-white bg-green-500 hover:brightness-110' : 'text-black bg-gray-300 hover:brightness-95'"
+                        @click.prevent="selectStaff(staff)">
+                        {{staff.fullname}}
+                      </button>
+                    </template>
+                  </template>
+                </div>
+              </template>
+
+              <!-- doctor -->
+              <template v-if="doctorCount > 0">
+                <span class="block mt-3">Window Doctor</span>
+                <div class="flex justify-start items-center gap-3">
+                  <template v-for="(staff, i) in users" :key="i">
+                    <template v-if="staff.role === 'doctor'">
+                      <button 
+                        class="p-2 rounded transition duration-75"
+                        :class="staff.selected ? 
+                        'text-white bg-green-500 hover:brightness-110' : 'text-black bg-gray-300 hover:brightness-95'"
+                        @click.prevent="selectStaff(staff)">
+                        {{staff.fullname}}
+                      </button>
+                    </template>
+                  </template>
+                </div>
+              </template>
             </div>
-            <div v-if="v$.window.user_id.$error">
-              <p class="text-md text-red-700">{{v$.window.user_id.$errors[0].$message}}</p>
+            <div>
+              <div v-if="v$.window.user_id.$error">
+                <p class="text-md text-red-700">{{v$.window.user_id.$errors[0].$message}}</p>
+              </div>
             </div>
           </div>
 
-          <!-- window services -->
+          <!-- services -->
           <div>
             <span>Window Services</span>
             <div
@@ -136,6 +156,28 @@ export default {
     window: Object,
   },
 
+  computed: {
+    staffCount() {
+      let x=0
+      for(const user in this.users) {
+        if(this.users[user].role === 'staff' || this.users[user].role === 'admin') {
+          x++
+          }
+      }
+      return x
+    },
+
+    doctorCount() {
+      let y=0
+      for(const user in this.users) {
+        if(this.users[user].role === 'doctor') {
+          y++
+          }
+      }
+      return y
+    }
+  },
+
   data() {
     return {
       v$: useVuelidate(),
@@ -193,6 +235,15 @@ export default {
           if(this.users[user].selected) {
             // sets window user to the value of the current user selected
             this.window.user_id = this.users[user].id
+
+            // check if user id doctor
+            if(this.users[user].role === 'doctor') {
+              // apply doctor to window
+              this.window.has_doctor = true
+            } else {
+              // remove doctor from window
+              this.window.has_doctor = false;
+            }
           } else {
             // if not clear the window user value
             this.window.user_id = ''
@@ -200,6 +251,8 @@ export default {
         } else {
           // deselect the current user
            this.users[user].selected = false
+          // remove doctor from window
+          this.window.has_doctor = false;
         }
        }
     },

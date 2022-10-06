@@ -1,12 +1,12 @@
 <template :auth="auth" :window="window">
   <Head>
-    <title>Staffs</title>
+    <title>Doctors</title>
   </Head>
   <div class="mx-5">
     <Breadcrumb :links="[
       {
-        label: 'Staffs',
-        to: '/staffs',
+        label: 'Doctors',
+        to: '/doctors',
       },
       {
         label: 'Register',
@@ -29,10 +29,10 @@
             <input
               type="text" name="firstname" id="firstname" placeholder="First Name"
               class="block w-full rounded px-3 py-2 border"
-              :class="v$.staff.firstname.$error ? 'border-red-500' : 'border-sky-600'"
-              v-model="staff.firstname">
-            <div v-if="v$.staff.firstname.$error">
-              <p class="text-md text-red-700">{{v$.staff.firstname.$errors[0].$message}}</p>
+              :class="v$.doctor.firstname.$error ? 'border-red-500' : 'border-sky-600'"
+              v-model="doctor.firstname">
+            <div v-if="v$.doctor.firstname.$error">
+              <p class="text-md text-red-700">{{v$.doctor.firstname.$errors[0].$message}}</p>
             </div>
           </label>
           <label for="lastname">
@@ -40,10 +40,10 @@
             <input
               type="text" name="lastname" id="lastname" placeholder="Last Name"
               class="block w-full rounded px-3 py-2 border border-sky"
-              :class="v$.staff.lastname.$error ? 'border-red-500' : 'border-sky-600'"
-              v-model="staff.lastname">
-            <div v-if="v$.staff.lastname.$error">
-              <p class="text-md text-red-700">{{v$.staff.lastname.$errors[0].$message}}</p>
+              :class="v$.doctor.lastname.$error ? 'border-red-500' : 'border-sky-600'"
+              v-model="doctor.lastname">
+            <div v-if="v$.doctor.lastname.$error">
+              <p class="text-md text-red-700">{{v$.doctor.lastname.$errors[0].$message}}</p>
             </div>
           </label>
         </div>
@@ -53,10 +53,10 @@
             <input
               type="text" name="contact_no" id="contact_no" placeholder="Contact Number"
               class="block w-full rounded px-3 py-2 border" maxlength="11"
-              :class="v$.staff.contact_no.$error ? 'border-red-500' : 'border-sky-600'"
-              v-model="staff.contact_no">
-            <div v-if="v$.staff.contact_no.$error">
-              <p class="text-md text-red-700">{{v$.staff.contact_no.$errors[0].$message}}</p>
+              :class="v$.doctor.contact_no.$error ? 'border-red-500' : 'border-sky-600'"
+              v-model="doctor.contact_no">
+            <div v-if="v$.doctor.contact_no.$error">
+              <p class="text-md text-red-700">{{v$.doctor.contact_no.$errors[0].$message}}</p>
             </div>
           </label>
           <label for="Email Address">
@@ -64,10 +64,10 @@
             <input
               type="email" name="email" id="email" placeholder="Email Address"
               class="block w-full rounded px-3 py-2 border"
-              :class="v$.staff.email.$error ? 'border-red-500' : 'border-sky-600'"
-              v-model="staff.email">
-            <div v-if="v$.staff.email.$error">
-              <p class="text-md text-red-700">{{v$.staff.email.$errors[0].$message}}</p>
+              :class="v$.doctor.email.$error ? 'border-red-500' : 'border-sky-600'"
+              v-model="doctor.email">
+            <div v-if="v$.doctor.email.$error">
+              <p class="text-md text-red-700">{{v$.doctor.email.$errors[0].$message}}</p>
             </div>
           </label>
         </div>
@@ -86,10 +86,10 @@
             <input
               type="text" name="username" id="username" placeholder="Username"
               class="block w-full rounded px-3 py-2 border"
-              :class="v$.staff.username.$error ? 'border-red-500' : 'border-sky-600'"
-              v-model="staff.username">
-            <div v-if="v$.staff.username.$error">
-              <p class="text-md text-red-700">{{v$.staff.username.$errors[0].$message}}</p>
+              :class="v$.doctor.username.$error ? 'border-red-500' : 'border-sky-600'"
+              v-model="doctor.username">
+            <div v-if="v$.doctor.username.$error">
+              <p class="text-md text-red-700">{{v$.doctor.username.$errors[0].$message}}</p>
             </div>
           </label>
           <label for="status">
@@ -108,8 +108,8 @@
               <input
                 :type="isPasswordVisible ? 'text' : 'password'" name="password" id="password" placeholder="Password"
                 class="block w-full rounded px-3 py-2 border"
-                :class="v$.staff.password.$error ? 'border-red-500' : 'borders-sky-600'"
-                v-model="staff.password">
+                :class="v$.doctor.password.$error ? 'border-red-500' : 'borders-sky-600'"
+                v-model="doctor.password">
                 <span 
                   class="absolute right-2 top-3 rounded hover:bg-gray-100 hover:cursor-pointer"
                   @click="isPasswordVisible = !isPasswordVisible">
@@ -126,8 +126,8 @@
                   </template>
                 </span>
               </div>
-            <div v-if="v$.staff.password.$error">
-              <p class="text-md text-red-700">{{v$.staff.password.$errors[0].$message}}</p>
+            <div v-if="v$.doctor.password.$error">
+              <p class="text-md text-red-700">{{v$.doctor.password.$errors[0].$message}}</p>
             </div>
           </label>
           <label for="password_confirmation">
@@ -136,8 +136,8 @@
               <input
                 :type="isPasswordVisible ? 'text' : 'password'" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password"
                 class="block w-full rounded px-3 py-2 border"
-                :class="v$.staff.password_confirmation.$error ? 'border-red-500' : 'borders-sky-600'"
-                v-model="staff.password_confirmation">
+                :class="v$.doctor.password_confirmation.$error ? 'border-red-500' : 'borders-sky-600'"
+                v-model="doctor.password_confirmation">
                 <span 
                   class="absolute right-2 top-3 rounded hover:bg-gray-100 hover:cursor-pointer"
                   @click="isPasswordVisible = !isPasswordVisible">
@@ -154,8 +154,8 @@
                   </template>
                 </span>
             </div>
-            <div v-if="v$.staff.password_confirmation.$error">
-              <p class="text-md text-red-700">{{v$.staff.password_confirmation.$errors[0].$message}}</p>
+            <div v-if="v$.doctor.password_confirmation.$error">
+              <p class="text-md text-red-700">{{v$.doctor.password_confirmation.$errors[0].$message}}</p>
             </div>
           </label>
         </div>
@@ -164,7 +164,7 @@
         <!-- action buttons -->
         <div class="w-full flex justify-end items-center gap-2 p-2">
           <button @click.prevent="clearFields()" type="reset" class="block rounded p-3 font-semibold text-lg bg-gray-200 text-black hover:bg-gray-100 hover:cursor-pointer" >Clear Fields</button>
-          <button type="submit" :disabled="submitted" class="block rounded p-3 font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">Register Staff</button>
+          <button type="submit" :disabled="submitted" class="block rounded p-3 font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">Register Doctor</button>
         </div>
       </div>
     </form>
@@ -200,13 +200,13 @@ export default {
   data() {
     return {
       v$: useVuelidate(),
-      staff: {
-        firstname: 'Reinard Sam',
-        lastname: 'Boado',
-        contact_no: '09987654322',
-        email: 'reinardsam@happylines.com',
-        username: 'reinardsam',
-        role: 'staff',  
+      doctor: {
+        firstname: 'John',
+        lastname: 'Doe',
+        contact_no: '09987654323',
+        email: 'johndoe@happypatient.com',
+        username: 'johndoe',
+        role: 'doctor',  
         status: 'active',
         password: 'ilovehappypatient',
         password_confirmation: 'ilovehappypatient',
@@ -218,7 +218,7 @@ export default {
 
   validations() {
     return {
-      staff: {
+      doctor: {
         firstname: { required },
         lastname: {required },
         contact_no: {
@@ -243,7 +243,7 @@ export default {
         password_confirmation: {
           required,
           minLength: minLength(8),
-          sameAs: sameAs(this.staff.password),
+          sameAs: sameAs(this.doctor.password),
         }
       },
     }
@@ -254,15 +254,15 @@ export default {
       this.submitted = true
       this.v$.$validate()
       if(!this.v$.$error) {
-        this.$inertia.post('/staffs', this.staff, {
+        this.$inertia.post('/doctors', this.doctor, {
           onError: (errors) => {
             for(const error in errors) {
               this.showToast(`${errors[error]}`, 'error')  
             }
-            this.showToast('Error registering staff', 'error')
+            this.showToast('Error registering doctor', 'error')
           },
           onSuccess: () => {
-            this.showToast('Successfully registered staff', 'success')
+            this.showToast('Successfully registered doctor', 'success')
           }
         })
       }
@@ -270,15 +270,15 @@ export default {
     },
 
     clearFields() {
-      this.staff =  {
+      this.doctor =  {
         firstname: '',
         lastname: '',
         contact_no: '',
         email: '',
         status: 'active',
         username: '',
-        role: 'staff',        
-        password: 'st@ffpw2k22',
+        role: 'doctor',        
+        password: 'ilovehappypatient',
       }
     }
   }

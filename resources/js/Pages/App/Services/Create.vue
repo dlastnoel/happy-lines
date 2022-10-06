@@ -48,7 +48,7 @@
           <div class="flex justify-end items-center">
             <div class="flex justify-center items-center gap-2 p-2">
               <button type="reset" class="block rounded p-3 font-semibold text-lg bg-gray-200 text-black hover:bg-gray-100 hover:cursor-pointer" @click="clearFields()">Clear Fields</button>
-              <button :disabled="submitted" type="submit" class="block rounded p-3 font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">Add Service</button>
+              <button :disabled="submitted" type="submit" class="block rounded p-3 font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">Create Service</button>
             </div>
           </div>
         </div>

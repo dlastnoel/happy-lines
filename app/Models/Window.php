@@ -17,6 +17,7 @@ class Window extends Model
         'description',
         'user_id',
         'is_active',
+        'has_doctor',
     ];
 
     public function services()
@@ -45,16 +46,39 @@ class Window extends Model
         return $this->belongsToMany(Patient::class, 'patient_user_window')
             ->withTimestamps()
             ->wherePivot('updated_at', '>=', Carbon::today()->toDateString())
-            ->withPivot('number');
+            ->withPivot('number')
+            ->withPivot('id');
     }
 
-    public function window_patient($patient_id)
+    public function pending_patients()
     {
         // return patients of today
         return $this->belongsToMany(Patient::class, 'patient_user_window')
             ->withTimestamps()
+            ->wherePivot('updated_at', '>=', Carbon::today()->toDateString())
+            ->wherePivot('status', 'pending')
+            ->withPivot('number')
+            ->withPivot('id');
+    }
+
+    public function pending_patient($patient_id)
+    {
+        // return active pending patient
+        return $this->belongsToMany(Patient::class, 'patient_user_window')
+            ->withTimestamps()
+            ->wherePivot('updated_at', '>=', Carbon::today()->toDateString())
             ->wherePivot('patient_id', $patient_id)
             ->wherePivot('status', 'pending')
+            ->withPivot('status');
+    }
+
+    public function serving_patient()
+    {
+        // return patient with serving status
+        return $this->belongsToMany(Patient::class, 'patient_user_window')
+            ->withTimestamps()
+            ->wherePivot('status', 'serving')
+            ->withPivot('number')
             ->withPivot('status');
     }
 

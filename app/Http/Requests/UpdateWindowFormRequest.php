@@ -43,6 +43,7 @@ class UpdateWindowFormRequest extends FormRequest
                 'integer',
             ],
             'is_active' => 'required|boolean',
+            'has_doctor' => 'required|boolean',
         ];
     }
 }

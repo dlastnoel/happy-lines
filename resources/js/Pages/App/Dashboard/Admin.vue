@@ -3,7 +3,7 @@
     <title>Dashboard</title>
   </Head>
   <div>
-    <h1 class="text-9xl">Dashboard Admin</h1>
+    <slot></slot>
   </div>
 </template>
 

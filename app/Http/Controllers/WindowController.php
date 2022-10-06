@@ -28,7 +28,9 @@ class WindowController extends Controller
                 'name' => $window->name,
                 'description' => $window->description,
                 'is_active' => $window->is_active === 1 ? true : false,
-                'user' => $window->user->fullname(),
+                'user' => $window->user->role === 'staff' ?
+                    'User: ' . $window->user->fullname() :
+                    'Doctor: ' . $window->user->fullname(),
             ])
         ]);
     }
@@ -47,12 +49,25 @@ class WindowController extends Controller
         // get all users that do not have a window
         $users = User::query()->whereNotIn('id', $tellers)->get();
 
+        // $doctors = [];
+
+        // foreach ($users as $user) {
+        //     if ($user->role === 'doctor') {
+        //         array_push($doctors, [
+        //             'id' => $user->id,
+        //             'fullname' => $user->fullname(),
+        //             'selected' => false,
+        //         ]);
+        //     }
+        // }
+
         // return view
         return Inertia::render('App/Windows/Create', [
             'auth' => getAuthUser(),
             'users' => $users->map(fn ($user) => [
                 'id' => $user->id,
                 'fullname' => $user->fullname(),
+                'role' => $user->role,
                 'selected' => false,
             ]),
             'services' => $services->map(fn ($service) => [
@@ -72,7 +87,7 @@ class WindowController extends Controller
     public function store(CreateWindowFormRequest $request)
     {
         $request->validated();
-        $window_data = $request->only('name', 'description', 'user_id', 'is_active');
+        $window_data = $request->only('name', 'description', 'user_id', 'is_active', 'has_doctor');
         $services = $request->only('services');
         $window = Window::create($window_data);
         foreach ($services as $service) {
@@ -127,6 +142,7 @@ class WindowController extends Controller
             'users' => $users->map(fn ($user) => [
                 'id' => $user->id,
                 'fullname' => $user->fullname(),
+                'role' => $user->role,
                 'selected' => $window->user_id === $user->id ? true : false,
             ]),
             'services' => $service_data,
@@ -137,6 +153,7 @@ class WindowController extends Controller
                 'user_id' => $window->user_id,
                 'services' => $window->services->pluck('id'),
                 'is_active' => $window->is_active === 1 ? true : false,
+                'has_doctor' => $window->has_doctor,
             ]
         ]);
     }

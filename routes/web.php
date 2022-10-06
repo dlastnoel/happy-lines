@@ -11,6 +11,7 @@ use App\Http\Controllers\LoginViewController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\StaffWindowController;
+use App\Http\Controllers\DoctorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/staffs/{user}/edit', [UserController::class, 'edit']);
     Route::put('/staffs/{user}', [UserController::class, 'update']);
 
+    // doctors
+    Route::get('/doctors', [DoctorController::class, 'index']);
+    Route::post('/doctors', [DoctorController::class, 'store']);
+    Route::get('/doctors/register', [DoctorController::class, 'register']);
+    Route::get('/doctors/{doctor}/edit', [DoctorController::class, 'edit']);
+    Route::put('/doctors/{doctor}', [DoctorController::class, 'update']);
+
     // windows 
     Route::resource('windows', WindowController::class);
 
@@ -57,9 +65,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('services', ServiceController::class);
 
     // staff window (queueing)
-    Route::get('/queues/{window}', [QueueController::class, 'serve']);
+    Route::get('/queues/{window}', [QueueController::class, 'serve'])
+        ->name('queue.serve');
     Route::post('/queues/{window}', [QueueController::class, 'update']);
     Route::get('/queues/{window}/{patient}/next', [QueueController::class, 'next']);
+    Route::get('/queues/{window}/{patient}/{next}/finish', [QueueController::class, 'finish']);
 });
 
 
