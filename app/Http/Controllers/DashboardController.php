@@ -9,9 +9,10 @@ use App\Models\Window;
 
 class DashboardController extends Controller
 {
-    //
+
     public function admin()
     {
+        // admin dashboard
         return Inertia::render('App/Dashboard/Admin', [
             'auth' => getAuthUser(),
         ]);
@@ -19,10 +20,19 @@ class DashboardController extends Controller
 
     public function staff()
     {
-        $window = auth()->user()->window;
+        // staff dashboard
         return Inertia::render('App/Dashboard/Staff', [
             'auth' => getAuthUser(),
             'window' => getAuthUserWindow(),
         ]);
     }
+
+    // public function doctor()
+    // {
+    //     // doctor dashboard
+    //     return Inertia::render('App/Dashboard/Doctor', [
+    //         'auth' => getAuthUser(),
+    //         'window' => getAuthUserWindow(),
+    //     ]);
+    // }
 }

@@ -4,12 +4,11 @@
   </Head>
   <div class="mx-5">
     <Breadcrumb
-        :links="[
-            {
-                label: window.name,
-                to: '#',
-            },
-        ]"
+      :links="[
+        {
+          label: w 
+        },
+      ]"
     />
   </div>
   <template v-if="patients.length || serving_patient != 0">

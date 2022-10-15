@@ -10,17 +10,6 @@ use App\Models\Window;
 
 class QueueController extends Controller
 {
-    public function index()
-    {
-        // return view with all active windows
-        return Inertia::render('App/Queues/Index', [
-            'windows' => Window::where('is_active', true)->get()->map(fn ($window) => [
-                'id' => $window->id,
-                'name' => $window->name,
-                'staff' => $window->user->fullname(),
-            ]),
-        ]);
-    }
 
     public function serve($id)
     {

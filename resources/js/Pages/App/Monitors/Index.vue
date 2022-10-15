@@ -23,7 +23,7 @@
                 <template v-for="(window, i) in windows" :key="i">
                   <Link 
                     class="p-2 rounded shadow text-lg text-white bg-sky-600 transition duration-75 hover:bg-sky-500"
-                    :href="`/main-menu/window/${window.id}`"> 
+                    :href="`/monitors/window/${window.id}`"> 
                     {{window.name}}
                   </Link>
                 </template>

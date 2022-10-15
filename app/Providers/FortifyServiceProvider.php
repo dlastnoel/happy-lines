@@ -33,6 +33,8 @@ class FortifyServiceProvider extends ServiceProvider
                         return redirect('/');
                     } else if (auth()->user()->role === 'staff') {
                         return redirect('/dashboard/staff');
+                    } else {
+                        return redirect('/dashboard/staff');
                     }
                 }
                 return Inertia::render('Auth/Login');

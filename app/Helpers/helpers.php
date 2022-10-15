@@ -52,6 +52,7 @@ if (!function_exists('getAuthUserWindow')) {
       return [
         'id' => Auth::user()->window->id,
         'name' => Auth::user()->window->name,
+        'has_doctor' => Auth::user()->window->has_doctor,
         'services' => Auth::user()->window->services->map(fn ($service) => [
           'id' => $service->id,
           'type' => $service->type

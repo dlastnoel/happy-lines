@@ -53,8 +53,8 @@
             </form>
           </div>
           <div class="w-full h-[10%] flex justify-end items-end gap-2 p-2">
-            <Link href="/queues" class="block rounded p-2 shadow text-sm bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">
-              Open Queues
+            <Link href="/monitors" class="block rounded p-2 shadow text-sm bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">
+              Monitoring
             </Link>
             <Link href="/service/select" class="block rounded p-2 shadow text-sm bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer">
               Open Main Menu
@@ -108,7 +108,6 @@ export default {
         username: { required, alphaNum },
         password: { 
           required,
-          minLength: minLength(8),
         }
       }
     }
