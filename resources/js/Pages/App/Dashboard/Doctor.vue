@@ -29,10 +29,10 @@ export default {
     auth: Object,
     window: {
       type: Object,
-      required: false,
+      required: true,
       default: {
         id: '',
-        name: '',        
+        name: '',
       }
     }
   },

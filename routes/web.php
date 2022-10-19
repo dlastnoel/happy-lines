@@ -12,7 +12,6 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MonitorController;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,11 +26,6 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/login', LoginViewController::class)
     ->name('login');
-// Route::get('/login', function () {
-//     return Inertia::render('Auth/Login');
-// })
-//     ->name('login');
-// Route::post('/login', [LoginController::class, 'login']);
 
 
 // Grouped with auth middleware
@@ -76,6 +70,8 @@ Route::middleware('auth')->group(function () {
     Route::controller(QueueController::class)->group(function () {
         Route::get('/queues/{window}', 'serve')
             ->name('queue.serve');
+        Route::get('/queues/{window}/diagnose', 'diagnose')
+            ->name('queue.diagnose');
         Route::post('/queues/{window}', 'update');
         Route::get('/queues/{window}/{patient}/next', 'next');
         Route::get('/queues/{window}/{patient}/{next}/finish', 'finish');

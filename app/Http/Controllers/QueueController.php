@@ -40,6 +40,39 @@ class QueueController extends Controller
         }
     }
 
+    public function diagnose($id)
+    {
+        // find window
+        $window = Window::find($id);
+
+        // check if window user matches authenticated user
+        if (auth()->user()->window->id === $window->id) {
+
+            $patients = $window->pending_patients()->orderBy('pivot_number', 'asc')->get();
+            $serving_patient = $window->serving_patient()->first();
+            return Inertia::render('App/Queues/Diagnose', [
+                'auth' => getAuthUser(),
+                'window' => getAuthUserWindow(),
+                'patients' => $patients->map(fn ($patient) => [
+                    'id' => $patient->id,
+                    'number' => $patient->pivot->number,
+                    'fullname' => $patient->fullname,
+                ]),
+                'serving_patient' => $window->serving_patient()->count() > 0 ? [
+                    'id' => $serving_patient->id,
+                    'number' => $serving_patient->pivot->number,
+                    'fullname' => $serving_patient->fullname,
+                    'sex' => $serving_patient->sex,
+                ] : '0',
+                'next' => count($patients) > 0 ? $patients[0]->id : 0,
+            ]);
+        }
+    }
+
+    public function store()
+    {
+    }
+
     public function next($window_id, $patient_id)
     {
         // find window

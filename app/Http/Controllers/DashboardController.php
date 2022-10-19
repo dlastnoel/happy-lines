@@ -13,26 +13,34 @@ class DashboardController extends Controller
     public function admin()
     {
         // admin dashboard
-        return Inertia::render('App/Dashboard/Admin', [
-            'auth' => getAuthUser(),
-        ]);
+        if (auth()->user()->role === 'admin') {
+            return Inertia::render('App/Dashboard/Admin', [
+                'auth' => getAuthUser(),
+            ]);
+        } else if (auth()->user()->role === 'staff') {
+            return redirect('/dashboard/staff');
+        } else {
+            return redirect('/dashboard/doctor');
+        }
     }
 
     public function staff()
     {
         // staff dashboard
-        return Inertia::render('App/Dashboard/Staff', [
-            'auth' => getAuthUser(),
-            'window' => getAuthUserWindow(),
-        ]);
+        if (auth()->user()->role === 'staff')
+            return Inertia::render('App/Dashboard/User', [
+                'auth' => getAuthUser(),
+                'window' => getAuthUserWindow(),
+            ]);
     }
 
-    // public function doctor()
-    // {
-    //     // doctor dashboard
-    //     return Inertia::render('App/Dashboard/Doctor', [
-    //         'auth' => getAuthUser(),
-    //         'window' => getAuthUserWindow(),
-    //     ]);
-    // }
+    public function doctor()
+    {
+        // doctor dashboard
+        if (auth()->user()->role === 'doctor')
+            return Inertia::render('App/Dashboard/Doctor', [
+                'auth' => getAuthUser(),
+                'window' => getAuthUserWindow(),
+            ]);
+    }
 }
