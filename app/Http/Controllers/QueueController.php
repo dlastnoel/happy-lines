@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreDiagnosisFormRequest;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -69,7 +70,7 @@ class QueueController extends Controller
         }
     }
 
-    public function store()
+    public function store(StoreDiagnosisFormRequest $request)
     {
     }
 

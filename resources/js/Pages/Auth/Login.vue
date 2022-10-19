@@ -14,7 +14,7 @@
         <div class="md:hidden w-1/2 grid  place-content-center">
           <Vue3Lottie :animationData="doctorLottie"/>
         </div>
-        <div class="h-full w-full flex flex-col justify-center items-center">
+        <div class="h-full w-full flex flex-col justify-center items-center p-3 md:p-2">
           <div class="w-full flex flex-col justify-center items-center h-[90%]">
             <h1 class="text-6xl text-center">Happy Lines</h1>
             <form class="mt-4" @submit.prevent="handleSubmit()">
@@ -23,7 +23,7 @@
                   <span class="text-md">Username</span>
                   <input 
                     type="text" name="username" id="username" placeholder="Username" 
-                    class="block rounded p-3 mt-1 w-[400px] md:w-[350px] lg:w-[400px] border-2"
+                    class="block rounded p-3 mt-1 w-full md:w-[350px] lg:w-[400px] border-2"
                     :class="v$.login.username.$error ? 'border-red-500' : 'border-sky-600'"
                     v-model="login.username" />
                 </label>
@@ -37,7 +37,7 @@
                   <span class="text-md">Password</span>
                   <input 
                     type="password" name="password" id="password" placeholder="Password" 
-                    class="block rounded p-3 mt-1 w-[400px] md:w-[350px] lg:w-[400px]  border-2"
+                    class="block rounded p-3 mt-1 w-full  md:w-[350px] lg:w-[400px]  border-2"
                     :class="v$.login.password.$error ? 'border-red-500' : 'border-sky-600'"
                     v-model="login.password" />
                 </label>
@@ -47,7 +47,7 @@
               </div>
 
               <div class="mt-5">
-                <input :disabled="submitted" type="submit" class="block rounded p-3 w-[400px] sm:w-[400px] md:w-[350px] lg:w-[400px] font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer" value="Login">
+                <input :disabled="submitted" type="submit" class="block rounded p-3 w-full md:w-[350px] lg:w-[400px] font-semibold text-lg bg-sky-600 text-white hover:bg-sky-500 hover:cursor-pointer" value="Login">
               </div>
               
             </form>

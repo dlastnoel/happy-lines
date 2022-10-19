@@ -75,6 +75,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/queues/{window}', 'update');
         Route::get('/queues/{window}/{patient}/next', 'next');
         Route::get('/queues/{window}/{patient}/{next}/finish', 'finish');
+        Route::post('/queues/diagnose', 'store');
     });
 });
 
