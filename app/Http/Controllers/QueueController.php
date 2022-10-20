@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreDiagnosisFormRequest;
-use App\Models\Patient;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 use App\Models\Window;
+use App\Models\Result;
+
+use App\Http\Requests\StoreResultFormRequest;
 
 class QueueController extends Controller
 {
@@ -70,8 +71,25 @@ class QueueController extends Controller
         }
     }
 
-    public function store(StoreDiagnosisFormRequest $request)
+    public function store(StoreResultFormRequest $request)
     {
+        $request->validated();
+        $window = Window::find($request->validated('window_id'));
+
+        Result::create($request->validated());
+
+        $window->serving_patient()->updateExistingPivot($request->validated('patient_id'), [
+            'status' => 'done',
+            'user_id' => auth()->user()->id,
+        ]);
+
+        $window->pending_patient($request->validated('next'))->updateExistingPivot($request->validated('next'), [
+            'status' => 'serving',
+        ]);
+
+        return redirect()->route('queue.serve', [
+            'window' => $request->validated('window_id'),
+        ]);
     }
 
     public function next($window_id, $patient_id)
@@ -102,7 +120,6 @@ class QueueController extends Controller
         if (auth()->user()->window->id === $window->id) {
 
             // update patient status move to pending
-            // dd($window->serving_patient()->first()->fullname);
             $window->serving_patient()->updateExistingPivot($patient_id, [
                 'status' => 'done',
                 'user_id' => auth()->user()->id,

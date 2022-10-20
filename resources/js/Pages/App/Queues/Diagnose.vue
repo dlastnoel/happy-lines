@@ -128,6 +128,7 @@ export default {
       emptyLottie,
       v$: useVuelidate(),
       patient: {
+        next: this.next,
         window_id: this.window.id,
         patient_id: this.serving_patient.id,
         diagnosis: '',
@@ -156,10 +157,10 @@ export default {
             for(const error in errors) {
               this.showToast(`${errors[error]}`, 'error')  
             }
-            this.showToast('Error diagnosis submission', 'error')
+            this.showToast('Error submitting result.', 'error')
           },
           onSuccess: () => {
-            this.showToast('Diagnosis submitted', 'success')
+            this.showToast('Result submitted.', 'success')
           }
         })
       }

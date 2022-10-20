@@ -72,7 +72,6 @@ Route::middleware('auth')->group(function () {
             ->name('queue.serve');
         Route::get('/queues/{window}/diagnose', 'diagnose')
             ->name('queue.diagnose');
-        Route::post('/queues/{window}', 'update');
         Route::get('/queues/{window}/{patient}/next', 'next');
         Route::get('/queues/{window}/{patient}/{next}/finish', 'finish');
         Route::post('/queues/diagnose', 'store');
